@@ -70,6 +70,12 @@
 
   .footer{text-align:center;padding:20px;font-size:11px;color:var(--text3)}
   .footer a{color:var(--ff);text-decoration:none}
+
+  /* Nav */
+  .nav{display:flex;justify-content:center;gap:6px;padding:0 16px 20px;flex-wrap:wrap}
+  .nav a{padding:8px 16px;border-radius:10px;background:var(--surface);border:1px solid var(--border);color:var(--text2);font-size:12px;font-weight:700;text-decoration:none;font-family:var(--font);transition:all 0.2s}
+  .nav a:hover{border-color:rgba(255,107,0,0.3);color:var(--ff)}
+  .nav a.active{background:var(--ff-g);border-color:rgba(255,107,0,0.4);color:var(--ff)}
 </style>
 </head>
 <body>
@@ -78,6 +84,13 @@
   <div class="header-tag">📅 Cronograma Oficial</div>
   <h1>SCOUTS GAMES CUP</h1>
   <p>11 de Abril — 03 de Maio · Todas as partidas à noite</p>
+</div>
+
+<div class="nav">
+  <a href="index.html">Inscrição</a>
+  <a href="regras.html">Regras</a>
+  <a href="cronograma.html" class="active">Cronograma</a>
+  <a href="premiacao.html">Premiação</a>
 </div>
 
 <div class="wrap">
