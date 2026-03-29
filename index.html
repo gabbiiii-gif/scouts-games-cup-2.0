@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scouts Games Cup — Inscrição</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #08080e;
+    --bg2: #0f0f1a;
+    --surface: rgba(255,255,255,0.03);
+    --border: rgba(255,255,255,0.07);
+    --text: #d0d0da;
+    --text2: #888;
+    --text3: #555;
+    --ff: #FF6B00;
+    --ff-glow: rgba(255,107,0,0.12);
+    --bs: #FFCE00;
+    --bs-glow: rgba(255,206,0,0.12);
+    --mc: #55C156;
+    --mc-glow: rgba(85,193,86,0.12);
+    --wr: #1DA1F2;
+    --wr-glow: rgba(29,161,242,0.12);
+    --danger: #ff4455;
+    --radius: 12px;
+    --font: 'Outfit', sans-serif;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    padding: 40px 20px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%; transform: translateX(-50%);
+    width: 500px; height: 260px;
+    background: radial-gradient(ellipse, rgba(255,107,0,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-tag {
+    font-size: 10px; font-weight: 700; letter-spacing: 4px;
+    color: var(--text3); text-transform: uppercase; margin-bottom: 10px;
+  }
+  .header h1 {
+    font-size: 30px; font-weight: 900; letter-spacing: -0.5px;
+    background: linear-gradient(90deg, var(--ff), var(--bs), var(--mc), var(--wr));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header p { font-size: 13px; color: var(--text3); margin-top: 6px; }
+
+  /* ── PROGRESS ── */
+  .progress {
+    display: flex; align-items: center; justify-content: center;
+    gap: 0; padding: 0 10px 28px;
+  }
+  .progress-step {
+    display: flex; flex-direction: column; align-items: center; gap: 5px;
+  }
+  .progress-dot {
+    width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800;
+    background: rgba(255,255,255,0.05);
+    border: 1.5px solid var(--border);
+    color: var(--text3);
+    transition: all 0.35s ease;
+  }
+  .progress-dot.active {
+    background: linear-gradient(135deg, var(--ff), #e05500);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 0 20px rgba(255,107,0,0.25);
+  }
+  .progress-dot.done {
+    background: var(--mc);
+    border-color: transparent;
+    color: #fff;
+  }
+  .progress-label {
+    font-size: 9px; font-weight: 700; color: var(--text3);
+    text-transform: uppercase; letter-spacing: 0.5px;
+    transition: color 0.3s;
+  }
+  .progress-label.active { color: var(--text2); }
+  .progress-line {
+    width: 36px; height: 2px; margin: 0 5px; margin-bottom: 18px;
+    background: var(--border); border-radius: 1px;
+    transition: background 0.35s;
+  }
+  .progress-line.active {
+    background: linear-gradient(90deg, var(--ff), var(--bs));
+  }
+
+  /* ── FORM SECTIONS ── */
+  .step { display: none; animation: fadeIn 0.3s ease; }
+  .step.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-title {
+    font-size: 15px; font-weight: 700; color: #ddd; margin-bottom: 18px;
+  }
+
+  /* ── GAME CARDS ── */
+  .game-cards { display: flex; flex-direction: column; gap: 8px; }
+  .game-card {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 18px; border-radius: 14px;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  .game-card:hover { border-color: rgba(255,255,255,0.12); }
+  .game-card.selected-ff { background: var(--ff-glow); border-color: rgba(255,107,0,0.35); }
+  .game-card.selected-bs { background: var(--bs-glow); border-color: rgba(255,206,0,0.35); }
+  .game-card.selected-mc { background: var(--mc-glow); border-color: rgba(85,193,86,0.35); }
+  .game-card.selected-wr { background: var(--wr-glow); border-color: rgba(29,161,242,0.35); }
+  .game-card-left { display: flex; align-items: center; gap: 14px; }
+  .game-card-icon { font-size: 30px; }
+  .game-card-name { font-size: 15px; font-weight: 700; color: #ccc; transition: color 0.2s; }
+  .game-card.selected-ff .game-card-name { color: var(--ff); }
+  .game-card.selected-bs .game-card-name { color: var(--bs); }
+  .game-card.selected-mc .game-card-name { color: var(--mc); }
+  .game-card.selected-wr .game-card-name { color: var(--wr); }
+  .game-card-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+  .game-card-price {
+    padding: 6px 14px; border-radius: 8px;
+    background: rgba(255,255,255,0.04);
+    font-size: 13px; font-weight: 800; color: var(--text3);
+    transition: all 0.2s;
+  }
+  .game-card.selected-ff .game-card-price { background: rgba(255,107,0,0.12); color: var(--ff); }
+  .game-card.selected-bs .game-card-price { background: rgba(255,206,0,0.12); color: var(--bs); }
+  .game-card.selected-mc .game-card-price { background: rgba(85,193,86,0.12); color: var(--mc); }
+  .game-card.selected-wr .game-card-price { background: rgba(29,161,242,0.12); color: var(--wr); }
+
+  /* ── INPUTS ── */
+  .field { margin-bottom: 16px; }
+  .field-label {
+    display: block; font-size: 11px; font-weight: 700;
+    color: var(--text2); margin-bottom: 6px;
+    letter-spacing: 0.8px; text-transform: uppercase;
+  }
+  .field-label .req { color: var(--ff); }
+  .field-input {
+    width: 100%; padding: 13px 15px; font-size: 14px;
+    font-family: var(--font);
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid var(--border);
+    border-radius: 10px; color: var(--text); outline: none;
+    transition: border-color 0.2s;
+  }
+  .field-input::placeholder { color: var(--text3); }
+  .field-input:focus { border-color: rgba(255,107,0,0.4); }
+
+  /* ── VERSION TOGGLE ── */
+  .version-toggle { display: flex; gap: 8px; }
+  .version-btn {
+    flex: 1; padding: 11px; border-radius: 10px;
+    font-size: 13px; font-weight: 600; font-family: var(--font);
+    background: rgba(255,255,255,0.03);
+    border: 2px solid rgba(255,255,255,0.07);
+    color: var(--text3); cursor: pointer;
+    transition: all 0.2s;
+  }
+  .version-btn.active {
+    background: var(--mc-glow);
+    border-color: rgba(85,193,86,0.4);
+    color: var(--mc);
+  }
+
+  /* ── AGE WARNING ── */
+  .age-warning {
+    display: none;
+    padding: 12px 16px; border-radius: 10px;
+    background: rgba(255,107,0,0.06);
+    border: 1px solid rgba(255,107,0,0.18);
+    font-size: 12px; color: var(--ff); line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .age-warning.show { display: block; }
+
+  /* ── BUTTONS ── */
+  .btn-row { display: flex; gap: 8px; margin-top: 22px; }
+  .btn {
+    flex: 1; padding: 14px; border-radius: var(--radius);
+    font-size: 14px; font-weight: 700; font-family: var(--font);
+    cursor: pointer; transition: all 0.2s; border: none;
+  }
+  .btn-back {
+    background: transparent;
+    border: 1.5px solid var(--border) !important;
+    color: var(--text2);
+  }
+  .btn-back:hover { border-color: rgba(255,255,255,0.15) !important; }
+  .btn-next {
+    flex: 2;
+    background: linear-gradient(135deg, var(--ff), #e05500);
+    color: #fff;
+  }
+  .btn-next:hover { filter: brightness(1.1); }
+  .btn-next:disabled {
+    background: rgba(255,255,255,0.05);
+    color: var(--text3); cursor: not-allowed; filter: none;
+  }
+  .btn-confirm {
+    flex: 2;
+    background: linear-gradient(135deg, var(--mc), #3da83e);
+    color: #fff;
+  }
+  .btn-confirm:hover { filter: brightness(1.1); }
+  .btn-confirm:disabled {
+    background: rgba(255,255,255,0.05);
+    color: var(--text3); cursor: not-allowed; filter: none;
+  }
+
+  /* ── SUMMARY ── */
+  .summary-box {
+    padding: 18px; border-radius: var(--radius);
+    background: var(--surface); border: 1px solid var(--border);
+    margin-bottom: 18px;
+  }
+  .summary-row {
+    display: flex; justify-content: space-between;
+    padding: 7px 0; font-size: 13px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .summary-row:last-child { border: none; }
+  .summary-row .label { color: var(--text2); }
+  .summary-row .value { color: #ddd; font-weight: 600; }
+
+  /* ── RULES BOX ── */
+  .rules-box {
+    padding: 16px; border-radius: var(--radius);
+    background: rgba(255,107,0,0.03);
+    border: 1px solid rgba(255,107,0,0.1);
+    margin-bottom: 18px;
+  }
+  .rules-box-title {
+    font-size: 11px; font-weight: 700; color: var(--ff);
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;
+  }
+  .rules-box p {
+    font-size: 12px; color: var(--text2); line-height: 1.6;
+    padding-left: 12px; margin-bottom: 5px;
+    border-left: 2px solid rgba(255,107,0,0.12);
+  }
+
+  /* ── CHECKBOX ── */
+  .accept-row {
+    display: flex; gap: 12px; align-items: flex-start;
+    cursor: pointer; margin-bottom: 20px;
+  }
+  .accept-box {
+    min-width: 24px; height: 24px; border-radius: 7px;
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800; color: #fff;
+    transition: all 0.2s; margin-top: 1px;
+  }
+  .accept-box.checked {
+    background: var(--ff); border-color: var(--ff);
+  }
+  .accept-text { font-size: 13px; color: #aaa; line-height: 1.5; }
+
+  /* ── SUCCESS ── */
+  .success-screen {
+    display: none; text-align: center;
+    padding: 60px 20px;
+    animation: fadeIn 0.4s ease;
+  }
+  .success-screen.active { display: block; }
+  .success-icon {
+    width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 20px;
+    background: var(--mc-glow);
+    border: 2px solid rgba(85,193,86,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 38px;
+  }
+  .success-screen h2 {
+    font-size: 22px; font-weight: 800; color: var(--mc); margin-bottom: 8px;
+  }
+  .success-screen .sub {
+    font-size: 14px; color: var(--text2); line-height: 1.6; margin-bottom: 24px;
+  }
+  .pix-box {
+    padding: 18px; border-radius: var(--radius);
+    background: var(--surface); border: 1px solid var(--border);
+    display: inline-block;
+  }
+  .pix-label {
+    font-size: 10px; font-weight: 700; color: var(--text3);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px;
+  }
+  .pix-key {
+    font-size: 20px; font-weight: 800; color: var(--ff); margin-bottom: 10px;
+  }
+  .pix-game { font-size: 12px; color: var(--text2); }
+  .pix-note {
+    font-size: 12px; color: var(--text3); margin-top: 18px;
+  }
+
+  /* ── PLAYERS CONTAINER ── */
+  #players-container .field { animation: fadeIn 0.25s ease; }
+
+  /* ── WHATSAPP LINK ── */
+  .wpp-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 18px; padding: 12px 24px; border-radius: 10px;
+    background: #25D366; color: #fff;
+    font-size: 14px; font-weight: 700; font-family: var(--font);
+    text-decoration: none; transition: filter 0.2s;
+  }
+  .wpp-btn:hover { filter: brightness(1.1); }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════ HEADER ════════════════════ -->
+<div class="header">
+  <div class="header-tag">⚡ Inscrição</div>
+  <h1>SCOUTS GAMES CUP</h1>
+  <p>Free Fire · Brawl Stars · Minecraft · Wild Rift</p>
+</div>
+
+<div class="container">
+
+<!-- ════════════════════ PROGRESS ════════════════════ -->
+<div class="progress" id="progress">
+  <div class="progress-step"><div class="progress-dot active" id="dot-0">1</div><span class="progress-label active" id="lbl-0">Modalidade</span></div>
+  <div class="progress-line" id="line-0"></div>
+  <div class="progress-step"><div class="progress-dot" id="dot-1">2</div><span class="progress-label" id="lbl-1">Dados</span></div>
+  <div class="progress-line" id="line-1"></div>
+  <div class="progress-step"><div class="progress-dot" id="dot-2">3</div><span class="progress-label" id="lbl-2">Time</span></div>
+  <div class="progress-line" id="line-2"></div>
+  <div class="progress-step"><div class="progress-dot" id="dot-3">4</div><span class="progress-label" id="lbl-3">Confirmar</span></div>
+</div>
+
+<!-- ════════════════════ STEP 0 — MODALIDADE ════════════════════ -->
+<div class="step active" id="step-0">
+  <div class="section-title">Escolha sua modalidade:</div>
+  <div class="game-cards">
+    <div class="game-card" onclick="selectGame('freefire')">
+      <div class="game-card-left">
+        <span class="game-card-icon">🔥</span>
+        <div><div class="game-card-name">Free Fire</div><div class="game-card-sub">Squad · 4 jogadores</div></div>
+      </div>
+      <div class="game-card-price">R$ 20/squad</div>
+    </div>
+    <div class="game-card" onclick="selectGame('brawlstars')">
+      <div class="game-card-left">
+        <span class="game-card-icon">⭐</span>
+        <div><div class="game-card-name">Brawl Stars</div><div class="game-card-sub">Trio · 3 jogadores</div></div>
+      </div>
+      <div class="game-card-price">R$ 15/trio</div>
+    </div>
+    <div class="game-card" onclick="selectGame('minecraft')">
+      <div class="game-card-left">
+        <span class="game-card-icon">⛏️</span>
+        <div><div class="game-card-name">Minecraft</div><div class="game-card-sub">Solo / Dupla</div></div>
+      </div>
+      <div class="game-card-price">R$ 10/jogador</div>
+    </div>
+    <div class="game-card" onclick="selectGame('wildrift')">
+      <div class="game-card-left">
+        <span class="game-card-icon">⚔️</span>
+        <div><div class="game-card-name">Wild Rift</div><div class="game-card-sub">Squad · 5 jogadores</div></div>
+      </div>
+      <div class="game-card-price">R$ 25/squad</div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-next" id="btn-step0" disabled onclick="goStep(1)">Próximo →</button>
+  </div>
+</div>
+
+<!-- ════════════════════ STEP 1 — DADOS PESSOAIS ════════════════════ -->
+<div class="step" id="step-1">
+  <div class="section-title">Seus dados:</div>
+
+  <div class="field">
+    <label class="field-label">Nome completo <span class="req">*</span></label>
+    <input class="field-input" id="inp-name" placeholder="Seu nome" required>
+  </div>
+  <div class="field">
+    <label class="field-label">WhatsApp (com DDD) <span class="req">*</span></label>
+    <input class="field-input" id="inp-whatsapp" placeholder="(XX) XXXXX-XXXX" type="tel">
+  </div>
+  <div class="field">
+    <label class="field-label">Idade <span class="req">*</span></label>
+    <input class="field-input" id="inp-age" placeholder="Sua idade" type="number" min="1" max="99" oninput="checkAge()">
+  </div>
+
+  <div class="age-warning" id="age-warning">
+    ⚠️ Menores de 16 anos: envie print da autorização do responsável junto com o comprovante PIX no WhatsApp.
+  </div>
+
+  <div class="field">
+    <label class="field-label">Discord (opcional)</label>
+    <input class="field-input" id="inp-discord" placeholder="usuario#1234">
+  </div>
+  <div class="field">
+    <label class="field-label">Instagram (opcional)</label>
+    <input class="field-input" id="inp-instagram" placeholder="@seuinsta">
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-back" onclick="goStep(0)">← Voltar</button>
+    <button class="btn btn-next" onclick="validateStep1()">Próximo →</button>
+  </div>
+</div>
+
+<!-- ════════════════════ STEP 2 — TIME / NICKS ════════════════════ -->
+<div class="step" id="step-2">
+  <div class="section-title" id="step2-title">Preencha os dados:</div>
+  <div id="players-container"></div>
+  <div class="btn-row">
+    <button class="btn btn-back" onclick="goStep(1)">← Voltar</button>
+    <button class="btn btn-next" onclick="validateStep2()">Próximo →</button>
+  </div>
+</div>
+
+<!-- ════════════════════ STEP 3 — CONFIRMAÇÃO ════════════════════ -->
+<div class="step" id="step-3">
+  <div class="section-title">Confirme seus dados:</div>
+
+  <div class="summary-box" id="summary-box"></div>
+
+  <div class="rules-box">
+    <div class="rules-box-title">Regras do campeonato</div>
+    <p>Proibido hacks, emuladores ou qualquer software externo.</p>
+    <p>Xingamentos, racismo, homofobia = eliminação imediata.</p>
+    <p>Organização pode transmitir partidas ao vivo.</p>
+    <p>Pagamento via PIX. Inscrição confirmada após comprovante.</p>
+    <p>Menores de 16 anos precisam de autorização do responsável.</p>
+    <p>Ao se inscrever, você concorda com todas as regras.</p>
+  </div>
+
+  <div class="accept-row" onclick="toggleAccept()">
+    <div class="accept-box" id="accept-box"></div>
+    <span class="accept-text">Li e aceito todas as regras do campeonato. Entendo que a inscrição só é confirmada após envio do comprovante PIX.</span>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-back" onclick="goStep(2)">← Voltar</button>
+    <button class="btn btn-confirm" id="btn-confirm" disabled onclick="submitForm()">✅ Confirmar Inscrição</button>
+  </div>
+</div>
+
+<!-- ════════════════════ SUCESSO ════════════════════ -->
+<div class="success-screen" id="success-screen">
+  <div class="success-icon">✅</div>
+  <h2>Inscrição Enviada!</h2>
+  <p class="sub">Agora envie o comprovante do PIX no WhatsApp para confirmar sua vaga.</p>
+  <div class="pix-box">
+    <div class="pix-label">Chave PIX (CPF)</div>
+    <!--
+      ╔══════════════════════════════════════════════╗
+      ║  ALTERE AQUI: sua chave PIX real             ║
+      ╚══════════════════════════════════════════════╝
+    -->
+    <div class="pix-key">077.590.542-97</div>
+    <div style="font-size:13px;color:#ccc;font-weight:600;margin-bottom:10px;">Gabriel dos Reis Silva (Sicredi)</div>
+    <div class="pix-game" id="pix-game-info"></div>
+  </div>
+  <!--
+    ╔══════════════════════════════════════════════╗
+    ║  ALTERE AQUI: seu número do WhatsApp         ║
+    ║  Formato: 55 + DDD + número (sem espaços)    ║
+    ╚══════════════════════════════════════════════╝
+  -->
+  <a class="wpp-btn" id="wpp-link" href="#" target="_blank">
+    💬 Enviar comprovante no WhatsApp
+  </a>
+  <p class="pix-note">Sua inscrição só é válida após confirmação do pagamento.</p>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ══════════════════════════════════════
+//  CONFIGURAÇÃO — ALTERE AQUI
+// ══════════════════════════════════════
+const CONFIG = {
+  // Cole a URL do seu Google Apps Script aqui:
+  SCRIPT_URL: "https://script.google.com/macros/s/AKfycby3Pn_SjgGPlli48kPmfkmuZq2yz7XLFmzb-dvO3cyknWiFZ0mqHEywXGkPBCvvmFQ-/exec",
+
+  // Seu número do WhatsApp:
+  WHATSAPP: "5593984166832",
+
+  // Sua chave PIX (CPF):
+  PIX_KEY: "077.590.542-97"
+};
+// ══════════════════════════════════════
+
+const GAMES = {
+  freefire:   { name: "Free Fire",    icon: "🔥", price: "R$ 20/squad", teamSize: 4, label: "Squad",      css: "ff" },
+  brawlstars: { name: "Brawl Stars",  icon: "⭐", price: "R$ 15/trio",  teamSize: 3, label: "Trio",       css: "bs" },
+  minecraft:  { name: "Minecraft",    icon: "⛏️", price: "R$ 10/jogador", teamSize: 1, label: "Solo/Dupla", css: "mc" },
+  wildrift:   { name: "Wild Rift",    icon: "⚔️", price: "R$ 25/squad",  teamSize: 5, label: "Squad",      css: "wr" }
+};
+
+let currentStep = 0;
+let selectedGame = null;
+let accepted = false;
+
+// ── GAME SELECTION ──
+function selectGame(id) {
+  selectedGame = id;
+  document.querySelectorAll('.game-card').forEach(c => {
+    c.className = 'game-card';
+  });
+  event.currentTarget.classList.add('selected-' + GAMES[id].css);
+  document.getElementById('btn-step0').disabled = false;
+}
+
+// ── NAVIGATION ──
+function goStep(n) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step-' + n).classList.add('active');
+
+  for (let i = 0; i < 4; i++) {
+    const dot = document.getElementById('dot-' + i);
+    const lbl = document.getElementById('lbl-' + i);
+    dot.className = 'progress-dot' + (i < n ? ' done' : i === n ? ' active' : '');
+    lbl.className = 'progress-label' + (i <= n ? ' active' : '');
+    if (i < 3) {
+      document.getElementById('line-' + i).className = 'progress-line' + (i < n ? ' active' : '');
+    }
+  }
+
+  if (n === 2) buildPlayerFields();
+  if (n === 3) buildSummary();
+
+  currentStep = n;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── AGE CHECK ──
+function checkAge() {
+  const age = parseInt(document.getElementById('inp-age').value);
+  const warn = document.getElementById('age-warning');
+  warn.classList.toggle('show', age > 0 && age < 16);
+}
+
+// ── VALIDATE STEP 1 ──
+function validateStep1() {
+  const name = document.getElementById('inp-name').value.trim();
+  const wpp = document.getElementById('inp-whatsapp').value.trim();
+  const age = document.getElementById('inp-age').value.trim();
+  if (!name || !wpp || !age) {
+    alert('Preencha todos os campos obrigatórios!');
+    return;
+  }
+  goStep(2);
+}
+
+// ── BUILD PLAYER FIELDS (STEP 2) ──
+function buildPlayerFields() {
+  const g = GAMES[selectedGame];
+  const container = document.getElementById('players-container');
+  const title = document.getElementById('step2-title');
+  title.innerHTML = g.icon + ' ' + g.name + ' <span style="font-weight:400;font-size:13px;color:#666">— Preencha os dados do seu ' + g.label.toLowerCase() + ':</span>';
+
+  let html = '';
+
+  if (selectedGame === 'minecraft') {
+    html += field('pl-nick-0', 'Seu Nick no Minecraft', 'Ex: SteveGamer123', true);
+    html += `
+      <div class="field">
+        <label class="field-label">Versão <span class="req">*</span></label>
+        <div class="version-toggle">
+          <button type="button" class="version-btn" id="ver-java" onclick="pickVersion('Java Edition')">Java Edition</button>
+          <button type="button" class="version-btn" id="ver-bedrock" onclick="pickVersion('Bedrock')">Bedrock</button>
+        </div>
+      </div>`;
+    html += field('pl-partner', 'Nick do parceiro (se dupla)', 'Deixe vazio se for solo', false);
+  } else {
+    html += field('pl-teamname', 'Nome do ' + g.label, 'Ex: ' + (selectedGame === 'freefire' ? 'Os Brabos' : 'Trio Insano'), true);
+    for (let i = 0; i < g.teamSize; i++) {
+      html += field('pl-nick-' + i, 'Jogador ' + (i + 1) + ' — Nick / ID', 'Nick do jogador ' + (i + 1), true);
+    }
+  }
+
+  container.innerHTML = html;
+}
+
+function field(id, label, placeholder, required) {
+  return `<div class="field">
+    <label class="field-label">${label} ${required ? '<span class="req">*</span>' : ''}</label>
+    <input class="field-input" id="${id}" placeholder="${placeholder}" ${required ? 'required' : ''}>
+  </div>`;
+}
+
+let mcVersion = '';
+function pickVersion(v) {
+  mcVersion = v;
+  document.getElementById('ver-java').classList.toggle('active', v === 'Java Edition');
+  document.getElementById('ver-bedrock').classList.toggle('active', v === 'Bedrock');
+}
+
+// ── VALIDATE STEP 2 ──
+function validateStep2() {
+  if (selectedGame === 'minecraft') {
+    const nick = document.getElementById('pl-nick-0').value.trim();
+    if (!nick) { alert('Preencha seu nick!'); return; }
+    if (!mcVersion) { alert('Selecione a versão (Java ou Bedrock)!'); return; }
+  } else {
+    const team = document.getElementById('pl-teamname').value.trim();
+    if (!team) { alert('Preencha o nome do time!'); return; }
+    const g = GAMES[selectedGame];
+    for (let i = 0; i < g.teamSize; i++) {
+      if (!document.getElementById('pl-nick-' + i).value.trim()) {
+        alert('Preencha o nick do Jogador ' + (i + 1) + '!');
+        return;
+      }
+    }
+  }
+  goStep(3);
+}
+
+// ── BUILD SUMMARY ──
+function buildSummary() {
+  const g = GAMES[selectedGame];
+  let rows = [
+    { l: 'Nome', v: val('inp-name') },
+    { l: 'WhatsApp', v: val('inp-whatsapp') },
+    { l: 'Idade', v: val('inp-age') },
+    { l: 'Modalidade', v: g.icon + ' ' + g.name },
+    { l: 'Valor', v: g.price },
+  ];
+
+  if (selectedGame !== 'minecraft') {
+    rows.push({ l: 'Time', v: val('pl-teamname') });
+  } else {
+    rows.push({ l: 'Versão', v: mcVersion });
+  }
+
+  document.getElementById('summary-box').innerHTML = rows.map(r =>
+    `<div class="summary-row"><span class="label">${r.l}</span><span class="value">${r.v}</span></div>`
+  ).join('');
+}
+
+function val(id) {
+  const el = document.getElementById(id);
+  return el ? el.value.trim() : '—';
+}
+
+// ── ACCEPT RULES ──
+function toggleAccept() {
+  accepted = !accepted;
+  const box = document.getElementById('accept-box');
+  box.classList.toggle('checked', accepted);
+  box.textContent = accepted ? '✓' : '';
+  document.getElementById('btn-confirm').disabled = !accepted;
+}
+
+// ── SUBMIT ──
+async function submitForm() {
+  if (!accepted) return;
+  const btn = document.getElementById('btn-confirm');
+  btn.textContent = 'Enviando...';
+  btn.disabled = true;
+
+  const g = GAMES[selectedGame];
+
+  const nicks = [];
+  for (let i = 0; i < 5; i++) {
+    const el = document.getElementById('pl-nick-' + i);
+    nicks.push(el ? el.value.trim() : '—');
+  }
+
+  const payload = {
+    timestamp: new Date().toLocaleString('pt-BR'),
+    nome: val('inp-name'),
+    whatsapp: val('inp-whatsapp'),
+    idade: val('inp-age'),
+    discord: val('inp-discord'),
+    instagram: val('inp-instagram'),
+    modalidade: g.name,
+    nomeTime: selectedGame !== 'minecraft' ? val('pl-teamname') : '—',
+    jogador1: nicks[0],
+    jogador2: nicks[1],
+    jogador3: nicks[2],
+    jogador4: nicks[3],
+    jogador5: nicks[4],
+    versaoMC: mcVersion || '—',
+    parceiraMC: selectedGame === 'minecraft' ? val('pl-partner') : '—',
+    status: 'PENDENTE'
+  };
+
+  // Enviar para Google Sheets
+  if (CONFIG.SCRIPT_URL !== "COLE_SUA_URL_AQUI") {
+    try {
+      const formData = new FormData();
+      formData.append('data', JSON.stringify(payload));
+      await fetch(CONFIG.SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: formData
+      });
+    } catch (e) {
+      console.log('Dados para backup:', payload);
+    }
+  }
+
+  // Montar tela de sucesso
+  document.getElementById('pix-game-info').textContent = g.icon + ' ' + g.name + ' — ' + g.price;
+
+  const msg = encodeURIComponent(
+    '🎮 *Inscrição Scouts Games Cup*\n\n' +
+    'Nome: ' + payload.nome + '\n' +
+    'Modalidade: ' + g.icon + ' ' + g.name + '\n' +
+    (payload.nomeTime !== '—' ? 'Time: ' + payload.nomeTime + '\n' : '') +
+    '\nEnvio o comprovante PIX em seguida! ✅'
+  );
+  document.getElementById('wpp-link').href = 'https://wa.me/' + CONFIG.WHATSAPP + '?text=' + msg;
+
+  // Mostrar tela de sucesso
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('progress').style.display = 'none';
+  document.getElementById('success-screen').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

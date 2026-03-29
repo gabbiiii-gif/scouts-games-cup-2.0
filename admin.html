@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scouts Games Cup — Painel do Organizador</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #08080e; --bg2: #0f0f1a;
+    --surface: rgba(255,255,255,0.03); --border: rgba(255,255,255,0.07);
+    --text: #d0d0da; --text2: #888; --text3: #555;
+    --ff: #FF6B00; --ff-g: rgba(255,107,0,0.12);
+    --bs: #FFCE00; --bs-g: rgba(255,206,0,0.12);
+    --mc: #55C156; --mc-g: rgba(85,193,86,0.12);
+    --wr: #1DA1F2; --wr-g: rgba(29,161,242,0.12);
+    --font: 'Outfit', sans-serif;
+  }
+  body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 600px; margin: 0 auto; padding: 0 16px 48px; }
+
+  .header { text-align: center; padding: 44px 20px 32px; position: relative; overflow: hidden; }
+  .header::before { content:''; position:absolute; top:-60px; left:50%; transform:translateX(-50%); width:600px; height:280px; background:radial-gradient(ellipse, rgba(255,107,0,0.07) 0%, transparent 70%); pointer-events:none; }
+  .header-tag { font-size:10px; font-weight:700; letter-spacing:4px; color:var(--text3); text-transform:uppercase; margin-bottom:10px; }
+  .header h1 { font-size:32px; font-weight:900; letter-spacing:-0.5px; background:linear-gradient(90deg,var(--ff),var(--bs),var(--mc),var(--wr)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .header p { font-size:13px; color:var(--text3); margin-top:8px; }
+  .admin-badge { display:inline-block; padding:4px 12px; border-radius:6px; background:rgba(255,107,0,0.1); border:1px solid rgba(255,107,0,0.25); font-size:10px; font-weight:700; color:var(--ff); letter-spacing:1.5px; text-transform:uppercase; margin-top:10px; }
+
+  .tabs { display:flex; gap:6px; margin-bottom:20px; overflow-x:auto; scrollbar-width:none; padding-bottom:2px; }
+  .tab { flex:1; min-width:80px; padding:12px 8px; border:2px solid var(--border); border-radius:12px; background:var(--surface); cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px; transition:all 0.25s; }
+  .tab span.icon { font-size:24px; }
+  .tab span.name { font-size:10px; font-weight:700; letter-spacing:0.3px; color:var(--text3); transition:color 0.2s; }
+  .tab.active-ff { border-color:rgba(255,107,0,0.4); background:var(--ff-g); }  .tab.active-ff .name { color:var(--ff); }
+  .tab.active-bs { border-color:rgba(255,206,0,0.4); background:var(--bs-g); }  .tab.active-bs .name { color:var(--bs); }
+  .tab.active-mc { border-color:rgba(85,193,86,0.4); background:var(--mc-g); }  .tab.active-mc .name { color:var(--mc); }
+  .tab.active-wr { border-color:rgba(29,161,242,0.4); background:var(--wr-g); }  .tab.active-wr .name { color:var(--wr); }
+
+  .panel { display:none; animation:fadeIn 0.3s ease; }
+  .panel.active { display:block; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+  .card { background:var(--surface); border:1px solid var(--border); border-radius:16px; overflow:hidden; margin-bottom:20px; }
+  .card-head { padding:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; border-bottom:1px solid var(--border); }
+  .card-head h2 { font-size:20px; font-weight:800; margin:0 0 2px; }
+  .card-head .mode { font-size:12px; color:var(--text3); }
+  .card-head .price { font-size:22px; font-weight:800; color:#fff; }
+  .card-head .team { font-size:11px; color:var(--text2); }
+
+  .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:rgba(255,255,255,0.04); }
+  .info-cell { padding:14px 20px; background:#0e0e18; }
+  .info-cell .lbl { font-size:10px; color:var(--text3); font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+  .info-cell .val { font-size:13px; color:#ccc; line-height:1.4; }
+
+  .rules-section { padding:20px; }
+  .rules-title { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:14px; }
+  .rule-item { display:flex; gap:10px; align-items:flex-start; font-size:12.5px; line-height:1.55; color:#bbb; margin-bottom:8px; }
+  .rule-num { min-width:22px; height:22px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:800; margin-top:1px; }
+
+  .section-title { font-size:13px; font-weight:700; color:#fff; text-transform:uppercase; letter-spacing:1px; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+  .section-title .bar { width:16px; height:2px; border-radius:1px; }
+  .gen-rule { padding:13px 16px; background:var(--surface); border:1px solid var(--border); border-radius:10px; display:flex; gap:12px; align-items:flex-start; margin-bottom:6px; }
+  .gen-rule .ic { font-size:18px; }
+  .gen-rule .tit { font-size:12px; font-weight:700; color:#ddd; margin-bottom:2px; }
+  .gen-rule .desc { font-size:12px; color:var(--text2); line-height:1.55; }
+
+  /* Simulator */
+  .sim-toggle { width:100%; padding:14px; background:linear-gradient(135deg,rgba(255,107,0,0.1),rgba(255,206,0,0.1)); border:1px solid rgba(255,107,0,0.2); border-radius:12px; color:var(--ff); font-size:13px; font-weight:700; cursor:pointer; font-family:var(--font); letter-spacing:0.5px; margin-bottom:8px; }
+  .sim-panel { display:none; padding:20px; background:var(--surface); border:1px solid var(--border); border-radius:12px; margin-bottom:20px; animation:fadeIn 0.3s; }
+  .sim-panel.open { display:block; }
+  .sim-label { display:flex; justify-content:space-between; margin-bottom:6px; font-size:12px; }
+  .sim-label .l { color:#bbb; font-weight:600; }
+  .sim-slider { width:100%; height:4px; border-radius:2px; background:rgba(255,255,255,0.1); margin-bottom:16px; }
+  .sim-totals { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; text-align:center; padding:16px; background:rgba(0,0,0,0.3); border-radius:10px; margin-top:16px; }
+  .sim-totals .lbl { font-size:10px; color:var(--text3); font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+  .sim-totals .val { font-size:18px; font-weight:800; }
+  .sim-dist { margin-top:12px; padding:12px 16px; background:rgba(85,193,86,0.06); border:1px solid rgba(85,193,86,0.12); border-radius:8px; }
+  .sim-dist-title { font-size:11px; color:var(--mc); font-weight:700; margin-bottom:8px; }
+  .sim-dist-row { display:flex; justify-content:space-between; font-size:12px; color:#aaa; margin-bottom:4px; }
+
+  /* Checklist */
+  .checklist { padding:20px; background:var(--surface); border:1px solid var(--border); border-radius:16px; margin-bottom:20px; }
+  .checklist h3 { font-size:13px; font-weight:700; color:#fff; text-transform:uppercase; letter-spacing:1px; margin-bottom:14px; }
+  .check-item { display:flex; gap:10px; align-items:center; padding:9px 0; font-size:12.5px; color:#bbb; border-bottom:1px solid rgba(255,255,255,0.03); cursor:pointer; }
+  .check-item:last-child { border:none; }
+  .check-item input { accent-color:var(--ff); width:17px; height:17px; cursor:pointer; }
+  .check-item.done span { text-decoration:line-through; color:var(--text3); }
+  .check-progress { margin-top:14px; }
+  .check-bar-bg { width:100%; height:6px; background:rgba(255,255,255,0.06); border-radius:3px; overflow:hidden; }
+  .check-bar { height:100%; background:linear-gradient(90deg,var(--ff),var(--mc)); border-radius:3px; transition:width 0.4s ease; }
+  .check-count { font-size:11px; color:var(--text3); margin-top:6px; text-align:right; }
+
+  .footer { text-align:center; padding:20px; font-size:11px; color:var(--text3); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-tag">⚡ Painel do Organizador</div>
+  <h1>SCOUTS GAMES CUP</h1>
+  <p>Free Fire · Brawl Stars · Minecraft · Wild Rift</p>
+  <div class="admin-badge">🔒 Área do Organizador</div>
+</div>
+
+<div class="wrap">
+
+  <!-- Game Tabs -->
+  <div class="tabs">
+    <div class="tab active-ff" onclick="showGame('ff',this)"><span class="icon">🔥</span><span class="name">Free Fire</span></div>
+    <div class="tab" onclick="showGame('bs',this)"><span class="icon">⭐</span><span class="name">Brawl Stars</span></div>
+    <div class="tab" onclick="showGame('mc',this)"><span class="icon">⛏️</span><span class="name">Minecraft</span></div>
+    <div class="tab" onclick="showGame('wr',this)"><span class="icon">⚔️</span><span class="name">Wild Rift</span></div>
+  </div>
+
+  <!-- FREE FIRE -->
+  <div class="panel active" id="panel-ff">
+    <div class="card">
+      <div class="card-head"><div><h2 style="color:var(--ff)">🔥 Free Fire</h2><div class="mode">Mata-mata / Battle Royale customizada</div></div><div style="text-align:right"><div class="price">R$ 20 <span style="font-size:13px;color:var(--text2)">/squad</span></div><div class="team">Squad (4 jogadores)</div></div></div>
+      <div class="info-grid"><div class="info-cell"><div class="lbl">Formato</div><div class="val">Fase de grupos (2-3 rodadas) → Semifinal → Final (3 rodadas)</div></div><div class="info-cell"><div class="lbl">Vagas</div><div class="val">8 a 24 squads</div></div></div>
+      <div class="rules-section"><div class="rules-title" style="color:var(--ff)">Regras</div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--ff-g);color:var(--ff)">1</span><span>Squads de 4 jogadores obrigatórios (sem reserva).</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--ff-g);color:var(--ff)">2</span><span>Sala customizada criada pela organização — código enviado 15 min antes.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--ff-g);color:var(--ff)">3</span><span>Mapa: Bermuda ou Purgatório (definido pela organização).</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--ff-g);color:var(--ff)">4</span><span>Proibido uso de hacks, emuladores ou qualquer software externo.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--ff-g);color:var(--ff)">5</span><span>Pontuação: 1º = 12 pts · 2º = 9 · 3º = 7 · 4º = 5 · 5º = 3 · Kill = 1 pt.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--ff-g);color:var(--ff)">6</span><span>Mínimo 2 rodadas por fase. Classificação por soma de pontos.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--ff-g);color:var(--ff)">7</span><span>Desconexão: 3 min para reconectar. Sem replay.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--ff-g);color:var(--ff)">8</span><span>Hack = eliminação e ban permanente.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BRAWL STARS -->
+  <div class="panel" id="panel-bs">
+    <div class="card">
+      <div class="card-head"><div><h2 style="color:var(--bs)">⭐ Brawl Stars</h2><div class="mode">Eliminação direta (MD3 / MD5 na final)</div></div><div style="text-align:right"><div class="price">R$ 15 <span style="font-size:13px;color:var(--text2)">/trio</span></div><div class="team">Trio (3 jogadores)</div></div></div>
+      <div class="info-grid"><div class="info-cell"><div class="lbl">Formato</div><div class="val">Chave eliminatória (MD3) → Semifinal → Final (MD5)</div></div><div class="info-cell"><div class="lbl">Vagas</div><div class="val">8 a 16 trios</div></div></div>
+      <div class="rules-section"><div class="rules-title" style="color:var(--bs)">Regras</div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--bs-g);color:var(--bs)">1</span><span>Times de 3. 1 reserva permitido.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--bs-g);color:var(--bs)">2</span><span>Modos: Gem Grab, Brawl Ball, Heist (alternados).</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--bs-g);color:var(--bs)">3</span><span>Mapas sorteados do pool competitivo.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--bs-g);color:var(--bs)">4</span><span>Todos Brawlers liberados. Sem repetição no time.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--bs-g);color:var(--bs)">5</span><span>MD3 até semi. Final MD5.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--bs-g);color:var(--bs)">6</span><span>Lobby criado pela org.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--bs-g);color:var(--bs)">7</span><span>5 min de atraso = WO.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--bs-g);color:var(--bs)">8</span><span>Proibido contas compartilhadas.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MINECRAFT -->
+  <div class="panel" id="panel-mc">
+    <div class="card">
+      <div class="card-head"><div><h2 style="color:var(--mc)">⛏️ Minecraft</h2><div class="mode">Bed Wars / Survival Games</div></div><div style="text-align:right"><div class="price">R$ 10 <span style="font-size:13px;color:var(--text2)">/jogador</span></div><div class="team">Solo / Dupla</div></div></div>
+      <div class="info-grid"><div class="info-cell"><div class="lbl">Formato</div><div class="val">Eliminatória simples → Semifinal → Final (MD3)</div></div><div class="info-cell"><div class="lbl">Vagas</div><div class="val">8 a 32 jogadores</div></div></div>
+      <div class="rules-section"><div class="rules-title" style="color:var(--mc)">Regras</div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--mc-g);color:var(--mc)">1</span><span>Java ou Bedrock (servidor definido pela org.).</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--mc-g);color:var(--mc)">2</span><span>Bed Wars: duplas. Survival Games: solo.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--mc-g);color:var(--mc)">3</span><span>IP do servidor: 30 min antes.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--mc-g);color:var(--mc)">4</span><span>Proibido: hacks, texture packs, auto-clicker, macros.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--mc-g);color:var(--mc)">5</span><span>20 min por rodada. Depois: morte súbita.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--mc-g);color:var(--mc)">6</span><span>Eliminação direta.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--mc-g);color:var(--mc)">7</span><span>Skin livre (sem conteúdo ofensivo).</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--mc-g);color:var(--mc)">8</span><span>Discord obrigatório.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WILD RIFT -->
+  <div class="panel" id="panel-wr">
+    <div class="card">
+      <div class="card-head"><div><h2 style="color:var(--wr)">⚔️ Wild Rift</h2><div class="mode">Eliminação direta (MD3 / MD5 na final)</div></div><div style="text-align:right"><div class="price">R$ 25 <span style="font-size:13px;color:var(--text2)">/squad</span></div><div class="team">Squad (5 jogadores)</div></div></div>
+      <div class="info-grid"><div class="info-cell"><div class="lbl">Formato</div><div class="val">Chave eliminatória (MD3) → Semifinal → Final (MD5)</div></div><div class="info-cell"><div class="lbl">Vagas</div><div class="val">8 a 16 squads</div></div></div>
+      <div class="rules-section"><div class="rules-title" style="color:var(--wr)">Regras</div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--wr-g);color:var(--wr)">1</span><span>Squads de 5. 1 reserva permitido.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--wr-g);color:var(--wr)">2</span><span>Modo: Ranked Pick (ban/pick competitivo).</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--wr-g);color:var(--wr)">3</span><span>Sala customizada. Código 15 min antes.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--wr-g);color:var(--wr)">4</span><span>Proibido hacks, scripts, macros.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--wr-g);color:var(--wr)">5</span><span>MD3 até semi. Final MD5.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--wr-g);color:var(--wr)">6</span><span>Desconexão: 3 min. Sem remake após 5 min.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--wr-g);color:var(--wr)">7</span><span>5 min de atraso = WO.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--wr-g);color:var(--wr)">8</span><span>Discord obrigatório.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- General Rules -->
+  <div class="section-title"><span class="bar" style="background:linear-gradient(90deg,var(--ff),var(--bs))"></span> Regras Gerais</div>
+  <div class="gen-rule"><span class="ic">📋</span><div><div class="tit">Inscrição</div><div class="desc">Via formulário online. Pagamento via PIX confirmado em até 24h.</div></div></div>
+  <div class="gen-rule"><span class="ic">🔞</span><div><div class="tit">Idade</div><div class="desc">Sem restrição. Menores de 16: autorização do responsável (print no WhatsApp).</div></div></div>
+  <div class="gen-rule"><span class="ic">📅</span><div><div class="tit">Cronograma</div><div class="desc">Inscrições: 7 dias · Check-in: 1h antes · Jogos: fins de semana.</div></div></div>
+  <div class="gen-rule"><span class="ic">🎙️</span><div><div class="tit">Comunicação</div><div class="desc">WhatsApp por modalidade + Discord para partidas.</div></div></div>
+  <div class="gen-rule"><span class="ic">⚠️</span><div><div class="tit">Conduta</div><div class="desc">Xingamentos, racismo, homofobia = eliminação + ban. Tolerância zero.</div></div></div>
+  <div class="gen-rule"><span class="ic">🏆</span><div><div class="tit">Premiação</div><div class="desc">Gift cards. 1º (50%) · 2º (30%) · 3º (20%) do fundo.</div></div></div>
+  <div class="gen-rule"><span class="ic">💰</span><div><div class="tit">Fundo</div><div class="desc">70% premiação · 30% organização.</div></div></div>
+  <div class="gen-rule" style="margin-bottom:24px"><span class="ic">📹</span><div><div class="tit">Transmissão</div><div class="desc">Org pode transmitir ao vivo. Jogadores concordam ao inscrever.</div></div></div>
+
+  <!-- Revenue Simulator -->
+  <button class="sim-toggle" onclick="toggleSim()" id="sim-btn">▸ SIMULADOR DE RECEITA</button>
+  <div class="sim-panel" id="sim-panel">
+    <p style="font-size:11px;color:var(--text3);margin-bottom:16px;">Ajuste a quantidade de inscritos por modalidade:</p>
+
+    <div class="sim-label"><span class="l">🔥 Free Fire</span><span style="color:var(--ff);font-weight:700" id="lbl-ff">12 × R$ 20 = R$ 240</span></div>
+    <input type="range" class="sim-slider" style="accent-color:var(--ff)" min="8" max="24" value="12" id="rng-ff" oninput="calcSim()">
+
+    <div class="sim-label"><span class="l">⭐ Brawl Stars</span><span style="color:var(--bs);font-weight:700" id="lbl-bs">10 × R$ 15 = R$ 150</span></div>
+    <input type="range" class="sim-slider" style="accent-color:var(--bs)" min="8" max="16" value="10" id="rng-bs" oninput="calcSim()">
+
+    <div class="sim-label"><span class="l">⛏️ Minecraft</span><span style="color:var(--mc);font-weight:700" id="lbl-mc">16 × R$ 10 = R$ 160</span></div>
+    <input type="range" class="sim-slider" style="accent-color:var(--mc)" min="8" max="32" value="16" id="rng-mc" oninput="calcSim()">
+
+    <div class="sim-label"><span class="l">⚔️ Wild Rift</span><span style="color:var(--wr);font-weight:700" id="lbl-wr">10 × R$ 25 = R$ 250</span></div>
+    <input type="range" class="sim-slider" style="accent-color:var(--wr)" min="8" max="16" value="10" id="rng-wr" oninput="calcSim()">
+
+    <div class="sim-totals">
+      <div><div class="lbl">Receita Total</div><div class="val" style="color:#fff" id="tot-rev">R$ 800</div></div>
+      <div><div class="lbl">Premiação (70%)</div><div class="val" style="color:var(--mc)" id="tot-prize">R$ 560</div></div>
+      <div><div class="lbl">Organização (30%)</div><div class="val" style="color:var(--bs)" id="tot-org">R$ 240</div></div>
+    </div>
+
+    <div class="sim-dist">
+      <div class="sim-dist-title">DISTRIBUIÇÃO POR MODALIDADE (estimativa)</div>
+      <div class="sim-dist-row"><span>🔥 Free Fire</span><span id="dist-ff">🥇 R$ 84 · 🥈 R$ 50 · 🥉 R$ 33</span></div>
+      <div class="sim-dist-row"><span>⭐ Brawl Stars</span><span id="dist-bs">🥇 R$ 52 · 🥈 R$ 31 · 🥉 R$ 21</span></div>
+      <div class="sim-dist-row"><span>⛏️ Minecraft</span><span id="dist-mc">🥇 R$ 56 · 🥈 R$ 33 · 🥉 R$ 22</span></div>
+      <div class="sim-dist-row"><span>⚔️ Wild Rift</span><span id="dist-wr">🥇 R$ 87 · 🥈 R$ 52 · 🥉 R$ 35</span></div>
+    </div>
+  </div>
+
+  <!-- Checklist -->
+  <div class="checklist" id="checklist">
+    <h3>📌 Checklist de Organização</h3>
+    <div id="check-items"></div>
+    <div class="check-progress">
+      <div class="check-bar-bg"><div class="check-bar" id="check-bar" style="width:0%"></div></div>
+      <div class="check-count" id="check-count">0 / 12 concluídos</div>
+    </div>
+  </div>
+
+  <div class="footer">Scouts Games Cup · Painel Admin v2.0</div>
+</div>
+
+<script>
+// Tabs
+function showGame(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.className = 'tab');
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active-' + id);
+}
+
+// Simulator
+function toggleSim() {
+  const p = document.getElementById('sim-panel');
+  const b = document.getElementById('sim-btn');
+  const open = p.classList.toggle('open');
+  b.textContent = (open ? '▾' : '▸') + ' SIMULADOR DE RECEITA';
+}
+
+function calcSim() {
+  const ff = +document.getElementById('rng-ff').value;
+  const bs = +document.getElementById('rng-bs').value;
+  const mc = +document.getElementById('rng-mc').value;
+  const wr = +document.getElementById('rng-wr').value;
+
+  const rFF = ff * 20, rBS = bs * 15, rMC = mc * 10, rWR = wr * 25;
+  const total = rFF + rBS + rMC + rWR;
+  const prize = Math.floor(total * 0.7);
+  const org = total - prize;
+
+  document.getElementById('lbl-ff').textContent = ff + ' × R$ 20 = R$ ' + rFF;
+  document.getElementById('lbl-bs').textContent = bs + ' × R$ 15 = R$ ' + rBS;
+  document.getElementById('lbl-mc').textContent = mc + ' × R$ 10 = R$ ' + rMC;
+  document.getElementById('lbl-wr').textContent = wr + ' × R$ 25 = R$ ' + rWR;
+
+  document.getElementById('tot-rev').textContent = 'R$ ' + total;
+  document.getElementById('tot-prize').textContent = 'R$ ' + prize;
+  document.getElementById('tot-org').textContent = 'R$ ' + org;
+
+  [[rFF,'dist-ff'],[rBS,'dist-bs'],[rMC,'dist-mc'],[rWR,'dist-wr']].forEach(([r,id]) => {
+    const p = Math.floor(r * 0.7);
+    document.getElementById(id).textContent = '🥇 R$ '+Math.floor(p*0.5)+' · 🥈 R$ '+Math.floor(p*0.3)+' · 🥉 R$ '+Math.floor(p*0.2);
+  });
+}
+
+// Checklist with localStorage
+const ITEMS = [
+  "Criar formulário de inscrição",
+  "Definir chave PIX e confirmar pagamentos",
+  "Montar grupo WhatsApp por modalidade",
+  "Criar servidor Discord",
+  "Definir datas e horários das fases",
+  "Comprar gift cards / produtos de premiação",
+  "Preparar arte de divulgação (Instagram, TikTok, WhatsApp)",
+  "Hospedar formulário (Vercel / Netlify)",
+  "Teste da sala customizada / servidor antes do evento",
+  "Recrutar 1-2 juízes/organizadores auxiliares",
+  "Definir regras de transmissão ao vivo",
+  "Fazer inscrição de teste no formulário"
+];
+
+let checks = [];
+try { checks = JSON.parse(localStorage.getItem('sgc-checks') || '[]'); } catch(e) { checks = []; }
+
+function renderChecklist() {
+  const el = document.getElementById('check-items');
+  el.innerHTML = ITEMS.map((item, i) => {
+    const done = checks.includes(i);
+    return '<label class="check-item'+(done?' done':'')+'"><input type="checkbox" '+(done?'checked':'')+' onchange="toggleCheck('+i+')"><span>'+item+'</span></label>';
+  }).join('');
+  const done = checks.length;
+  const pct = Math.round((done / ITEMS.length) * 100);
+  document.getElementById('check-bar').style.width = pct + '%';
+  document.getElementById('check-count').textContent = done + ' / ' + ITEMS.length + ' concluídos';
+}
+
+function toggleCheck(i) {
+  const idx = checks.indexOf(i);
+  if (idx > -1) checks.splice(idx, 1); else checks.push(i);
+  try { localStorage.setItem('sgc-checks', JSON.stringify(checks)); } catch(e) {}
+  renderChecklist();
+}
+
+renderChecklist();
+calcSim();
+</script>
+</body>
+</html>

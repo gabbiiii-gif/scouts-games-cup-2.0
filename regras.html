@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scouts Games Cup — Regras & Informações</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #08080e; --bg2: #0f0f1a;
+    --surface: rgba(255,255,255,0.03); --border: rgba(255,255,255,0.07);
+    --text: #d0d0da; --text2: #888; --text3: #555;
+    --ff: #FF6B00; --ff-g: rgba(255,107,0,0.12);
+    --bs: #FFCE00; --bs-g: rgba(255,206,0,0.12);
+    --mc: #55C156; --mc-g: rgba(85,193,86,0.12);
+    --wr: #1DA1F2; --wr-g: rgba(29,161,242,0.12);
+    --font: 'Outfit', sans-serif;
+  }
+  body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 600px; margin: 0 auto; padding: 0 16px 48px; }
+
+  /* Header */
+  .header { text-align: center; padding: 44px 20px 32px; position: relative; overflow: hidden; }
+  .header::before { content:''; position:absolute; top:-60px; left:50%; transform:translateX(-50%); width:600px; height:280px; background:radial-gradient(ellipse, rgba(255,107,0,0.07) 0%, transparent 70%); pointer-events:none; }
+  .header-tag { font-size:10px; font-weight:700; letter-spacing:4px; color:var(--text3); text-transform:uppercase; margin-bottom:10px; }
+  .header h1 { font-size:32px; font-weight:900; letter-spacing:-0.5px; background:linear-gradient(90deg,var(--ff),var(--bs),var(--mc),var(--wr)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .header p { font-size:13px; color:var(--text3); margin-top:8px; }
+  .header .subtitle { font-size:14px; color:var(--text2); margin-top:4px; }
+
+  /* CTA Button */
+  .cta-wrap { text-align:center; margin:0 0 28px; }
+  .cta { display:inline-block; padding:14px 36px; border-radius:12px; background:linear-gradient(135deg,var(--ff),#e05500); color:#fff; font-size:15px; font-weight:800; font-family:var(--font); text-decoration:none; transition:filter 0.2s; letter-spacing:0.3px; }
+  .cta:hover { filter:brightness(1.12); }
+
+  /* Tabs */
+  .tabs { display:flex; gap:6px; margin-bottom:20px; overflow-x:auto; scrollbar-width:none; padding-bottom:2px; }
+  .tab { flex:1; min-width:80px; padding:12px 8px; border:2px solid var(--border); border-radius:12px; background:var(--surface); cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px; transition:all 0.25s; }
+  .tab span.icon { font-size:24px; }
+  .tab span.name { font-size:10px; font-weight:700; letter-spacing:0.3px; color:var(--text3); transition:color 0.2s; }
+  .tab.active-ff { border-color:rgba(255,107,0,0.4); background:var(--ff-g); }
+  .tab.active-ff .name { color:var(--ff); }
+  .tab.active-bs { border-color:rgba(255,206,0,0.4); background:var(--bs-g); }
+  .tab.active-bs .name { color:var(--bs); }
+  .tab.active-mc { border-color:rgba(85,193,86,0.4); background:var(--mc-g); }
+  .tab.active-mc .name { color:var(--mc); }
+  .tab.active-wr { border-color:rgba(29,161,242,0.4); background:var(--wr-g); }
+  .tab.active-wr .name { color:var(--wr); }
+
+  /* Game Panel */
+  .panel { display:none; animation:fadeIn 0.3s ease; }
+  .panel.active { display:block; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+  .card { background:var(--surface); border:1px solid var(--border); border-radius:16px; overflow:hidden; margin-bottom:20px; }
+  .card-head { padding:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; border-bottom:1px solid var(--border); }
+  .card-head h2 { font-size:20px; font-weight:800; margin:0 0 2px; }
+  .card-head .mode { font-size:12px; color:var(--text3); }
+  .card-head .price { font-size:22px; font-weight:800; color:#fff; }
+  .card-head .team { font-size:11px; color:var(--text2); }
+
+  .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:rgba(255,255,255,0.04); }
+  .info-cell { padding:14px 20px; background:#0e0e18; }
+  .info-cell .lbl { font-size:10px; color:var(--text3); font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+  .info-cell .val { font-size:13px; color:#ccc; line-height:1.4; }
+
+  .rules-section { padding:20px; }
+  .rules-title { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:14px; }
+  .rule-item { display:flex; gap:10px; align-items:flex-start; font-size:12.5px; line-height:1.55; color:#bbb; margin-bottom:8px; }
+  .rule-num { min-width:22px; height:22px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:800; margin-top:1px; }
+
+  /* General Rules */
+  .section-title { font-size:13px; font-weight:700; color:#fff; text-transform:uppercase; letter-spacing:1px; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+  .section-title .bar { width:16px; height:2px; border-radius:1px; }
+  .gen-rule { padding:13px 16px; background:var(--surface); border:1px solid var(--border); border-radius:10px; display:flex; gap:12px; align-items:flex-start; margin-bottom:6px; }
+  .gen-rule .ic { font-size:18px; }
+  .gen-rule .tit { font-size:12px; font-weight:700; color:#ddd; margin-bottom:2px; }
+  .gen-rule .desc { font-size:12px; color:var(--text2); line-height:1.55; }
+
+  /* Prize highlight */
+  .prize-box { text-align:center; padding:24px 20px; background:linear-gradient(135deg,rgba(255,107,0,0.06),rgba(255,206,0,0.06)); border:1px solid rgba(255,107,0,0.12); border-radius:14px; margin-bottom:20px; }
+  .prize-box h3 { font-size:14px; font-weight:800; color:var(--ff); margin-bottom:8px; text-transform:uppercase; letter-spacing:1px; }
+  .prize-row { display:flex; justify-content:center; gap:20px; flex-wrap:wrap; }
+  .prize-item { text-align:center; }
+  .prize-item .medal { font-size:28px; }
+  .prize-item .pct { font-size:14px; font-weight:800; color:#ddd; }
+  .prize-item .lbl { font-size:10px; color:var(--text3); }
+
+  /* Footer */
+  .footer { text-align:center; padding:20px; font-size:11px; color:var(--text3); }
+  .footer a { color:var(--ff); text-decoration:none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-tag">🎮 Campeonato Online</div>
+  <h1>SCOUTS GAMES CUP</h1>
+  <p>Free Fire · Brawl Stars · Minecraft · Wild Rift</p>
+  <div class="subtitle">Online & Aberto — Premiação em Gift Cards</div>
+</div>
+
+<div class="wrap">
+
+  <!-- CTA -->
+  <div class="cta-wrap">
+    <!--
+      ╔════════════════════════════════════════════════╗
+      ║  ALTERE AQUI: link do formulário de inscrição  ║
+      ╚════════════════════════════════════════════════╝
+    -->
+    <a class="cta" href="https://scouts-games-cup.vercel.app" target="_blank">📋 INSCREVA-SE AGORA</a>
+  </div>
+
+  <!-- Prize Highlight -->
+  <div class="prize-box">
+    <h3>🏆 Premiação</h3>
+    <div class="prize-row">
+      <div class="prize-item"><div class="medal">🥇</div><div class="pct">50%</div><div class="lbl">1º Lugar</div></div>
+      <div class="prize-item"><div class="medal">🥈</div><div class="pct">30%</div><div class="lbl">2º Lugar</div></div>
+      <div class="prize-item"><div class="medal">🥉</div><div class="pct">20%</div><div class="lbl">3º Lugar</div></div>
+    </div>
+    <p style="font-size:11px;color:var(--text3);margin-top:10px;">Gift cards / produtos — 70% das inscrições vão para o fundo de prêmios</p>
+  </div>
+
+  <!-- Game Tabs -->
+  <div class="tabs">
+    <div class="tab active-ff" onclick="showGame('ff',this)" id="tab-ff">
+      <span class="icon">🔥</span><span class="name">Free Fire</span>
+    </div>
+    <div class="tab" onclick="showGame('bs',this)" id="tab-bs">
+      <span class="icon">⭐</span><span class="name">Brawl Stars</span>
+    </div>
+    <div class="tab" onclick="showGame('mc',this)" id="tab-mc">
+      <span class="icon">⛏️</span><span class="name">Minecraft</span>
+    </div>
+    <div class="tab" onclick="showGame('wr',this)" id="tab-wr">
+      <span class="icon">⚔️</span><span class="name">Wild Rift</span>
+    </div>
+  </div>
+
+  <!-- FREE FIRE -->
+  <div class="panel active" id="panel-ff">
+    <div class="card">
+      <div class="card-head">
+        <div><h2 style="color:var(--ff)">🔥 Free Fire</h2><div class="mode">Mata-mata / Battle Royale customizada</div></div>
+        <div style="text-align:right"><div class="price">R$ 20 <span style="font-size:13px;color:var(--text2)">/squad</span></div><div class="team">Squad (4 jogadores)</div></div>
+      </div>
+      <div class="info-grid">
+        <div class="info-cell"><div class="lbl">Formato</div><div class="val">Fase de grupos (2-3 rodadas) → Semifinal → Final (3 rodadas)</div></div>
+        <div class="info-cell"><div class="lbl">Vagas</div><div class="val">8 a 24 squads</div></div>
+      </div>
+      <div class="rules-section">
+        <div class="rules-title" style="color:var(--ff)">Regras da Modalidade</div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--ff-g);color:var(--ff)">1</span><span>Squads de 4 jogadores obrigatórios (sem reserva).</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--ff-g);color:var(--ff)">2</span><span>Sala customizada criada pela organização — código enviado 15 min antes.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--ff-g);color:var(--ff)">3</span><span>Mapa: Bermuda ou Purgatório (definido pela organização).</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--ff-g);color:var(--ff)">4</span><span>Proibido uso de hacks, emuladores ou qualquer software externo.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--ff-g);color:var(--ff)">5</span><span>Sistema de pontuação: 1º = 12 pts · 2º = 9 · 3º = 7 · 4º = 5 · 5º = 3 · Kill = 1 pt cada.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--ff-g);color:var(--ff)">6</span><span>Mínimo de 2 rodadas por fase. Classificação por soma de pontos.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--ff-g);color:var(--ff)">7</span><span>Desconexão: jogador tem até 3 minutos para reconectar. Sem replay da partida.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--ff-g);color:var(--ff)">8</span><span>Qualquer squad flagrado com hack é eliminado e banido permanentemente.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BRAWL STARS -->
+  <div class="panel" id="panel-bs">
+    <div class="card">
+      <div class="card-head">
+        <div><h2 style="color:var(--bs)">⭐ Brawl Stars</h2><div class="mode">Eliminação direta (MD3 / MD5 na final)</div></div>
+        <div style="text-align:right"><div class="price">R$ 15 <span style="font-size:13px;color:var(--text2)">/trio</span></div><div class="team">Trio (3 jogadores)</div></div>
+      </div>
+      <div class="info-grid">
+        <div class="info-cell"><div class="lbl">Formato</div><div class="val">Chave eliminatória simples (MD3) → Semifinal → Final (MD5)</div></div>
+        <div class="info-cell"><div class="lbl">Vagas</div><div class="val">8 a 16 trios</div></div>
+      </div>
+      <div class="rules-section">
+        <div class="rules-title" style="color:var(--bs)">Regras da Modalidade</div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--bs-g);color:var(--bs)">1</span><span>Times de 3 jogadores. 1 reserva permitido (declarar na inscrição).</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--bs-g);color:var(--bs)">2</span><span>Modos: Gem Grab, Brawl Ball e Heist (alternados por rodada).</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--bs-g);color:var(--bs)">3</span><span>Mapas sorteados do pool competitivo vigente.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--bs-g);color:var(--bs)">4</span><span>Brawlers banidos: nenhum (todos liberados). Sem repetição no mesmo time.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--bs-g);color:var(--bs)">5</span><span>Formato MD3 (melhor de 3) até semifinal. Final em MD5.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--bs-g);color:var(--bs)">6</span><span>Lobby de amigo — organização cria a sala e envia link.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--bs-g);color:var(--bs)">7</span><span>Atraso máximo de 5 minutos. Após isso, WO (vitória por ausência).</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--bs-g);color:var(--bs)">8</span><span>Proibido uso de contas compartilhadas ou de terceiros.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MINECRAFT -->
+  <div class="panel" id="panel-mc">
+    <div class="card">
+      <div class="card-head">
+        <div><h2 style="color:var(--mc)">⛏️ Minecraft</h2><div class="mode">Bed Wars ou Survival Games</div></div>
+        <div style="text-align:right"><div class="price">R$ 10 <span style="font-size:13px;color:var(--text2)">/jogador</span></div><div class="team">Solo / Dupla</div></div>
+      </div>
+      <div class="info-grid">
+        <div class="info-cell"><div class="lbl">Formato</div><div class="val">Eliminatória simples → Semifinal → Final (MD3)</div></div>
+        <div class="info-cell"><div class="lbl">Vagas</div><div class="val">8 a 32 jogadores</div></div>
+      </div>
+      <div class="rules-section">
+        <div class="rules-title" style="color:var(--mc)">Regras da Modalidade</div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--mc-g);color:var(--mc)">1</span><span>Versão: Java Edition ou Bedrock (servidor compatível definido pela org.).</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--mc-g);color:var(--mc)">2</span><span>Modo Bed Wars: duplas. Modo Survival Games: solo.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--mc-g);color:var(--mc)">3</span><span>Servidor fornecido pela organização (IP divulgado 30 min antes).</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--mc-g);color:var(--mc)">4</span><span>Proibido: hacks, texture packs com vantagem, auto-clicker, macros.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--mc-g);color:var(--mc)">5</span><span>Cada rodada tem tempo máximo de 20 minutos. Após isso, morte súbita.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--mc-g);color:var(--mc)">6</span><span>Classificação: eliminação direta. Quem perde, sai.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--mc-g);color:var(--mc)">7</span><span>Skin livre, desde que não ofensiva ou com conteúdo impróprio.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--mc-g);color:var(--mc)">8</span><span>Jogadores devem estar no Discord da organização para comunicação.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WILD RIFT -->
+  <div class="panel" id="panel-wr">
+    <div class="card">
+      <div class="card-head">
+        <div><h2 style="color:var(--wr)">⚔️ Wild Rift</h2><div class="mode">Eliminação direta (MD3 / MD5 na final)</div></div>
+        <div style="text-align:right"><div class="price">R$ 25 <span style="font-size:13px;color:var(--text2)">/squad</span></div><div class="team">Squad (5 jogadores)</div></div>
+      </div>
+      <div class="info-grid">
+        <div class="info-cell"><div class="lbl">Formato</div><div class="val">Chave eliminatória (MD3) → Semifinal → Final (MD5)</div></div>
+        <div class="info-cell"><div class="lbl">Vagas</div><div class="val">8 a 16 squads</div></div>
+      </div>
+      <div class="rules-section">
+        <div class="rules-title" style="color:var(--wr)">Regras da Modalidade</div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--wr-g);color:var(--wr)">1</span><span>Squads de 5 jogadores obrigatórios. 1 reserva permitido (declarar na inscrição).</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--wr-g);color:var(--wr)">2</span><span>Modo: Ranked Pick (ban/pick padrão competitivo).</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--wr-g);color:var(--wr)">3</span><span>Sala customizada criada pela organização. Código enviado 15 min antes.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--wr-g);color:var(--wr)">4</span><span>Proibido uso de hacks, scripts, macros ou qualquer software externo.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--wr-g);color:var(--wr)">5</span><span>Formato MD3 (melhor de 3) até semifinal. Final em MD5 (melhor de 5).</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--wr-g);color:var(--wr)">6</span><span>Desconexão: jogador tem até 3 minutos para reconectar. Sem remake após 5 min de jogo.</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--wr-g);color:var(--wr)">7</span><span>Atraso máximo de 5 minutos. Após isso, WO (vitória por ausência).</span></div>
+        <div class="rule-item"><span class="rule-num" style="background:var(--wr-g);color:var(--wr)">8</span><span>Jogadores devem estar no Discord da organização durante as partidas.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- General Rules -->
+  <div class="section-title"><span class="bar" style="background:linear-gradient(90deg,var(--ff),var(--bs))"></span> Regras Gerais</div>
+
+  <div class="gen-rule"><span class="ic">📋</span><div><div class="tit">Inscrição</div><div class="desc">Via formulário online. Pagamento via PIX confirmado em até 24h.</div></div></div>
+  <div class="gen-rule"><span class="ic">🔞</span><div><div class="tit">Idade</div><div class="desc">Sem restrição de idade. Menores de 16 precisam de autorização do responsável (print no WhatsApp basta).</div></div></div>
+  <div class="gen-rule"><span class="ic">📅</span><div><div class="tit">Cronograma</div><div class="desc">Inscrições: 7 dias · Check-in: 1h antes · Jogos: fins de semana (sábado e domingo).</div></div></div>
+  <div class="gen-rule"><span class="ic">🎙️</span><div><div class="tit">Comunicação</div><div class="desc">Grupo no WhatsApp por modalidade + servidor Discord para partidas ao vivo.</div></div></div>
+  <div class="gen-rule"><span class="ic">⚠️</span><div><div class="tit">Conduta</div><div class="desc">Xingamentos, racismo, homofobia = eliminação imediata e ban permanente. Tolerância zero.</div></div></div>
+  <div class="gen-rule"><span class="ic">🏆</span><div><div class="tit">Premiação</div><div class="desc">Gift cards / produtos. Distribuição: 1º lugar (50%) · 2º lugar (30%) · 3º lugar (20%) do fundo de prêmios.</div></div></div>
+  <div class="gen-rule"><span class="ic">💰</span><div><div class="tit">Fundo de Prêmios</div><div class="desc">70% das inscrições vai para premiação. 30% cobre custos de organização (servidor, divulgação).</div></div></div>
+  <div class="gen-rule" style="margin-bottom:28px"><span class="ic">📹</span><div><div class="tit">Transmissão</div><div class="desc">Organização pode transmitir partidas ao vivo. Jogadores concordam ao se inscrever.</div></div></div>
+
+  <!-- Bottom CTA -->
+  <div class="cta-wrap">
+    <a class="cta" href="https://scouts-games-cup.vercel.app" target="_blank">📋 INSCREVA-SE AGORA</a>
+  </div>
+
+  <div class="footer">Scouts Games Cup · Organizado por Gabriel dos Reis Silva<br>Dúvidas? <a href="https://wa.me/5593984166832" target="_blank">WhatsApp (93) 98416-6832</a></div>
+</div>
+
+<script>
+function showGame(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.className = 'tab');
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active-' + id);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scouts Games Cup — Cronograma</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#08080e;--surface:rgba(255,255,255,0.03);--border:rgba(255,255,255,0.07);
+    --text:#d0d0da;--text2:#888;--text3:#555;
+    --ff:#FF6B00;--ff-g:rgba(255,107,0,0.10);
+    --bs:#FFCE00;--bs-g:rgba(255,206,0,0.10);
+    --mc:#55C156;--mc-g:rgba(85,193,86,0.10);
+    --wr:#1DA1F2;--wr-g:rgba(29,161,242,0.10);
+    --font:'Outfit',sans-serif;
+  }
+  body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:600px;margin:0 auto;padding:0 16px 48px}
+
+  .header{text-align:center;padding:44px 20px 28px;position:relative;overflow:hidden}
+  .header::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:600px;height:280px;background:radial-gradient(ellipse,rgba(255,107,0,0.07) 0%,transparent 70%);pointer-events:none}
+  .header-tag{font-size:10px;font-weight:700;letter-spacing:4px;color:var(--text3);text-transform:uppercase;margin-bottom:10px}
+  .header h1{font-size:30px;font-weight:900;letter-spacing:-0.5px;background:linear-gradient(90deg,var(--ff),var(--bs),var(--mc),var(--wr));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .header p{font-size:13px;color:var(--text3);margin-top:8px}
+
+  /* Timeline */
+  .timeline{position:relative;padding-left:28px}
+  .timeline::before{content:'';position:absolute;left:11px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--ff),var(--bs),var(--mc),var(--wr));border-radius:1px}
+
+  .week{margin-bottom:32px;position:relative}
+  .week-dot{position:absolute;left:-28px;top:0;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;z-index:2}
+  .week-header{margin-bottom:14px}
+  .week-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+  .week-game{font-size:22px;font-weight:800;display:flex;align-items:center;gap:10px}
+  .week-dates{font-size:12px;color:var(--text2);margin-top:4px}
+
+  .day-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:10px}
+  .day-head{padding:14px 18px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+  .day-name{font-size:14px;font-weight:700;color:#ddd}
+  .day-date{font-size:12px;color:var(--text2);font-weight:600}
+  .day-body{padding:0}
+
+  .slot{display:flex;align-items:stretch;border-bottom:1px solid rgba(255,255,255,0.03)}
+  .slot:last-child{border:none}
+  .slot-time{min-width:80px;padding:12px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:1px solid rgba(255,255,255,0.04);background:rgba(0,0,0,0.15)}
+  .slot-time .t{font-size:14px;font-weight:800;color:#fff}
+  .slot-time .dur{font-size:9px;color:var(--text3);font-weight:600;margin-top:2px}
+  .slot-info{padding:12px 16px;flex:1}
+  .slot-title{font-size:13px;font-weight:700;color:#ddd;margin-bottom:3px}
+  .slot-desc{font-size:11px;color:var(--text2);line-height:1.5}
+  .slot-tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-top:5px}
+
+  /* Important dates bar */
+  .dates-bar{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:28px}
+  .date-card{padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;text-align:center}
+  .date-card .lbl{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+  .date-card .val{font-size:15px;font-weight:800;color:#ddd}
+  .date-card .sub{font-size:10px;color:var(--text3);margin-top:2px}
+
+  /* Legend */
+  .legend{display:flex;flex-wrap:wrap;gap:12px;padding:16px 18px;background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:28px}
+  .legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2)}
+  .legend-dot{width:10px;height:10px;border-radius:3px}
+
+  .cta-wrap{text-align:center;margin:28px 0}
+  .cta{display:inline-block;padding:14px 36px;border-radius:12px;background:linear-gradient(135deg,var(--ff),#e05500);color:#fff;font-size:15px;font-weight:800;font-family:var(--font);text-decoration:none;transition:filter 0.2s}
+  .cta:hover{filter:brightness(1.12)}
+
+  .footer{text-align:center;padding:20px;font-size:11px;color:var(--text3)}
+  .footer a{color:var(--ff);text-decoration:none}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-tag">📅 Cronograma Oficial</div>
+  <h1>SCOUTS GAMES CUP</h1>
+  <p>11 de Abril — 03 de Maio · Todas as partidas à noite</p>
+</div>
+
+<div class="wrap">
+
+  <!-- Key Dates -->
+  <div class="dates-bar">
+    <div class="date-card">
+      <div class="lbl">Inscrições abertas</div>
+      <div class="val">04 - 10 Abril</div>
+      <div class="sub">Encerram sexta 23h59</div>
+    </div>
+    <div class="date-card">
+      <div class="lbl">Duração do campeonato</div>
+      <div class="val">4 Semanas</div>
+      <div class="sub">1 modalidade por semana</div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--ff)"></div>Semana 1 · Free Fire</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--bs)"></div>Semana 2 · Brawl Stars</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--mc)"></div>Semana 3 · Minecraft</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--wr)"></div>Semana 4 · Wild Rift</div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="timeline">
+
+    <!-- ═══ SEMANA 1 — FREE FIRE ═══ -->
+    <div class="week">
+      <div class="week-dot" style="background:var(--ff)">1</div>
+      <div class="week-header">
+        <div class="week-label" style="color:var(--ff)">Semana 1</div>
+        <div class="week-game" style="color:var(--ff)">🔥 Free Fire</div>
+        <div class="week-dates">11 e 12 de Abril (Sábado e Domingo)</div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-head">
+          <span class="day-name">🗓 Sábado — 11/04</span>
+          <span class="day-date">Fase de Grupos</span>
+        </div>
+        <div class="day-body">
+          <div class="slot">
+            <div class="slot-time"><span class="t">18:30</span><span class="dur">30 min</span></div>
+            <div class="slot-info"><div class="slot-title">Check-in</div><div class="slot-desc">Confirmação de presença no grupo WhatsApp. Squads ausentes perdem a vaga.</div></div>
+          </div>
+          <div class="slot">
+            <div class="slot-time"><span class="t">19:00</span><span class="dur">45 min</span></div>
+            <div class="slot-info"><div class="slot-title">Rodada 1 — Fase de Grupos</div><div class="slot-desc">Sala customizada. Código enviado 15 min antes. Pontuação por colocação + kills.</div><div class="slot-tag" style="background:var(--ff-g);color:var(--ff)">Battle Royale</div></div>
+          </div>
+          <div class="slot">
+            <div class="slot-time"><span class="t">19:50</span><span class="dur">10 min</span></div>
+            <div class="slot-info"><div class="slot-title">Intervalo</div><div class="slot-desc">Apuração de pontos. Resultados parciais no grupo.</div></div>
+          </div>
+          <div class="slot">
+            <div class="slot-time"><span class="t">20:00</span><span class="dur">45 min</span></div>
+            <div class="slot-info"><div class="slot-title">Rodada 2 — Fase de Grupos</div><div class="slot-desc">Segundo mapa. Pontuação acumula com a rodada anterior.</div><div class="slot-tag" style="background:var(--ff-g);color:var(--ff)">Battle Royale</div></div>
+          </div>
+          <div class="slot">
+            <div class="slot-time"><span class="t">20:50</span><span class="dur">—</span></div>
+            <div class="slot-info"><div class="slot-title">Classificação</div><div class="slot-desc">Top squads por pontuação avançam para as eliminatórias de domingo.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-head">
+          <span class="day-name">🗓 Domingo — 12/04</span>
+          <span class="day-date">Eliminatórias + Final</span>
+        </div>
+        <div class="day-body">
+          <div class="slot">
+            <div class="slot-time"><span class="t">18:30</span><span class="dur">30 min</span></div>
+            <div class="slot-info"><div class="slot-title">Check-in Eliminatórias</div><div class="slot-desc">Apenas squads classificados no sábado.</div></div>
+          </div>
+          <div class="slot">
+            <div class="slot-time"><span class="t">19:00</span><span class="dur">45 min</span></div>
+            <div class="slot-info"><div class="slot-title">Semifinal — Rodada 1</div><div class="slot-desc">Sala customizada com squads classificados.</div><div class="slot-tag" style="background:var(--ff-g);color:var(--ff)">Semifinal</div></div>
+          </div>
+          <div class="slot">
+            <div class="slot-time"><span class="t">19:50</span><span class="dur">45 min</span></div>
+            <div class="slot-info"><div class="slot-title">Semifinal — Rodada 2</div><div class="slot-desc">Pontuação acumulada define os finalistas.</div></div>
+          </div>
+          <div class="slot">
+            <div class="slot-time"><span class="t">20:40</span><span class="dur">45 min</span></div>
+            <div class="slot-info"><div class="slot-title">🏆 GRANDE FINAL</div><div class="slot-desc">Top squads. Rodada decisiva. Pontuação zerada — vale tudo nessa.</div><div class="slot-tag" style="background:var(--ff);color:#fff">Final</div></div>
+          </div>
+          <div class="slot">
+            <div class="slot-time"><span class="t">21:30</span><span class="dur">—</span></div>
+            <div class="slot-info"><div class="slot-title">🎉 Premiação Free Fire</div><div class="slot-desc">Anúncio dos vencedores. Gift cards enviados na hora.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SEMANA 2 — BRAWL STARS ═══ -->
+    <div class="week">
+      <div class="week-dot" style="background:var(--bs)">2</div>
+      <div class="week-header">
+        <div class="week-label" style="color:var(--bs)">Semana 2</div>
+        <div class="week-game" style="color:var(--bs)">⭐ Brawl Stars</div>
+        <div class="week-dates">18 e 19 de Abril (Sábado e Domingo)</div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-head"><span class="day-name">🗓 Sábado — 18/04</span><span class="day-date">Oitavas + Quartas</span></div>
+        <div class="day-body">
+          <div class="slot"><div class="slot-time"><span class="t">18:30</span><span class="dur">30 min</span></div><div class="slot-info"><div class="slot-title">Check-in</div><div class="slot-desc">Confirmação no WhatsApp. Trios ausentes = WO.</div></div></div>
+          <div class="slot"><div class="slot-time"><span class="t">19:00</span><span class="dur">60 min</span></div><div class="slot-info"><div class="slot-title">Oitavas de Final (MD3)</div><div class="slot-desc">Chave eliminatória. Modos alternados: Gem Grab → Brawl Ball → Heist.</div><div class="slot-tag" style="background:var(--bs-g);color:var(--bs)">MD3</div></div></div>
+          <div class="slot"><div class="slot-time"><span class="t">20:00</span><span class="dur">10 min</span></div><div class="slot-info"><div class="slot-title">Intervalo</div><div class="slot-desc">Atualização do chaveamento.</div></div></div>
+          <div class="slot"><div class="slot-time"><span class="t">20:10</span><span class="dur">60 min</span></div><div class="slot-info"><div class="slot-title">Quartas de Final (MD3)</div><div class="slot-desc">8 trios restantes. Mapas sorteados.</div><div class="slot-tag" style="background:var(--bs-g);color:var(--bs)">MD3</div></div></div>
+          <div class="slot"><div class="slot-time"><span class="t">21:10</span><span class="dur">—</span></div><div class="slot-info"><div class="slot-title">Encerramento do dia</div><div class="slot-desc">4 trios classificados para domingo.</div></div></div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-head"><span class="day-name">🗓 Domingo — 19/04</span><span class="day-date">Semifinal + Final</span></div>
+        <div class="day-body">
+          <div class="slot"><div class="slot-time"><span class="t">18:30</span><span class="dur">30 min</span></div><div class="slot-info"><div class="slot-title">Check-in</div><div class="slot-desc">4 trios classificados.</div></div></div>
+          <div class="slot"><div class="slot-time"><span class="t">19:00</span><span class="dur">50 min</span></div><div class="slot-info"><div class="slot-title">Semifinais (MD3)</div><div class="slot-desc">2 partidas simultâneas.</div><div class="slot-tag" style="background:var(--bs-g);color:var(--bs)">Semifinal</div></div></div>
+          <div class="slot"><div class="slot-time"><span class="t">19:50</span><span class="dur">10 min</span></div><div class="slot-info"><div class="slot-title">Intervalo + Disputa de 3º lugar (MD3)</div><div class="slot-desc">Perdedores das semis disputam o bronze.</div></div></div>
+          <div class="slot"><div class="slot-time"><span class="t">20:00</span><span class="dur">60 min</span></div><div class="slot-info"><div class="slot-title">🏆 GRANDE FINAL (MD5)</div><div class="slot-desc">Melhor de 5. Modos alternados. Tudo ou nada.</div><div class="slot-tag" style="background:var(--bs);color:#000">Final MD5</div></div></div>
+          <div class="slot"><div class="slot-time"><span class="t">21:00</span><span class="dur">—</span></div><div class="slot-info"><div class="slot-title">🎉 Premiação Brawl Stars</div><div class="slot-desc">Gift cards enviados na hora.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SEMANA 3 — MINECRAFT ═══ -->
+    <div class="week">
+      <div class="week-dot" style="background:var(--mc)">3</div>
+      <div class="week-header">
+        <div class="week-label" style="color:var(--mc)">Semana 3</div>
+        <div class="week-game" style="color:var(--mc)">⛏️ Minecraft</div>
+        <div class="week-dates">25 e 26 de Abril (Sábado e Domingo)</div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-head"><span class="day-name">🗓 Sábado — 25/04</span><span class="day-date">Eliminatórias</span></div>
+        <div class="day-body">
+          <div class="slot"><div class="slot-time"><span class="t">18:30</span><span class="dur">30 min</span></div><div class="slot-info"><div class="slot-title">Check-in + Teste de conexão</div><div class="slot-desc">Entrar no servidor e Discord. IP enviado 30 min antes.</div></div></div>
+          <div class="slot"><div class="slot-time"><span class="t">19:00</span><span class="dur">40 min</span></div><div class="slot-info"><div class="slot-title">Rodada 1 — Eliminatória</div><div class="slot-desc">Bed Wars (duplas) ou Survival Games (solo). Perdeu, saiu.</div><div class="slot-tag" style="background:var(--mc-g);color:var(--mc)">Eliminatória</div></div></div>
+          <div class="slot"><div class="slot-time"><span class="t">19:45</span><span class="dur">40 min</span></div><div class="slot-info"><div class="slot-title">Rodada 2 — Eliminatória</div><div class="slot-desc">Metade restante. Máximo 20 min por partida.</div><div class="slot-tag" style="background:var(--mc-g);color:var(--mc)">Eliminatória</div></div></div>
+          <div class="slot"><div class="slot-time"><span class="t">20:30</span><span class="dur">40 min</span></div><div class="slot-info"><div class="slot-title">Rodada 3 — Quartas</div><div class="slot-desc">8 jogadores/duplas restantes.</div></div></div>
+          <div class="slot"><div class="slot-time"><span class="t">21:10</span><span class="dur">—</span></div><div class="slot-info"><div class="slot-title">Encerramento</div><div class="slot-desc">4 classificados para domingo.</div></div></div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-head"><span class="day-name">🗓 Domingo — 26/04</span><span class="day-date">Semifinal + Final</span></div>
+        <div class="day-body">
+          <div class="slot"><div class="slot-time"><span class="t">18:30</span><span class="dur">30 min</span></div><div class="slot-info"><div class="slot-title">Check-in</div><div class="slot-desc">4 classificados entram no servidor.</div></div></div>
+          <div class="slot"><div class="slot-time"><span class="t">19:00</span><span class="dur">50 min</span></div><div class="slot-info"><div class="slot-title">Semifinais (MD3)</div><div class="slot-desc">2 partidas. Melhor de 3 rodadas.</div><div class="slot-tag" style="background:var(--mc-g);color:var(--mc)">Semifinal</div></div></div>
+          <div class="slot"><div class="slot-time"><span class="t">19:50</span><span class="dur">30 min</span></div><div class="slot-info"><div class="slot-title">Disputa de 3º lugar</div><div class="slot-desc">Partida única.</div></div></div>
+          <div class="slot"><div class="slot-time"><span class="t">20:20</span><span class="dur">50 min</span></div><div class="slot-info"><div class="slot-title">🏆 GRANDE FINAL (MD3)</div><div class="slot-desc">Melhor de 3. O último de pé leva tudo.</div><div class="slot-tag" style="background:var(--mc);color:#fff">Final MD3</div></div></div>
+          <div class="slot"><div class="slot-time"><span class="t">21:10</span><span class="dur">—</span></div><div class="slot-info"><div class="slot-title">🎉 Premiação Minecraft</div><div class="slot-desc">Gift cards enviados na hora.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SEMANA 4 — WILD RIFT ═══ -->
+    <div class="week">
+      <div class="week-dot" style="background:var(--wr)">4</div>
+      <div class="week-header">
+        <div class="week-label" style="color:var(--wr)">Semana 4</div>
+        <div class="week-game" style="color:var(--wr)">⚔️ Wild Rift</div>
+        <div class="week-dates">02 e 03 de Maio (Sábado e Domingo)</div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-head"><span class="day-name">🗓 Sábado — 02/05</span><span class="day-date">Quartas de Final</span></div>
+        <div class="day-body">
+          <div class="slot"><div class="slot-time"><span class="t">18:30</span><span class="dur">30 min</span></div><div class="slot-info"><div class="slot-title">Check-in</div><div class="slot-desc">Squads confirmam no WhatsApp e Discord.</div></div></div>
+          <div class="slot"><div class="slot-time"><span class="t">19:00</span><span class="dur">90 min</span></div><div class="slot-info"><div class="slot-title">Quartas de Final (MD3)</div><div class="slot-desc">4 partidas. Ban/pick competitivo. Sala customizada pela org.</div><div class="slot-tag" style="background:var(--wr-g);color:var(--wr)">MD3</div></div></div>
+          <div class="slot"><div class="slot-time"><span class="t">20:30</span><span class="dur">—</span></div><div class="slot-info"><div class="slot-title">Encerramento</div><div class="slot-desc">4 squads classificados para domingo.</div></div></div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-head"><span class="day-name">🗓 Domingo — 03/05</span><span class="day-date">Semifinal + Grande Final</span></div>
+        <div class="day-body">
+          <div class="slot"><div class="slot-time"><span class="t">18:30</span><span class="dur">30 min</span></div><div class="slot-info"><div class="slot-title">Check-in</div><div class="slot-desc">4 squads finalistas.</div></div></div>
+          <div class="slot"><div class="slot-time"><span class="t">19:00</span><span class="dur">60 min</span></div><div class="slot-info"><div class="slot-title">Semifinais (MD3)</div><div class="slot-desc">2 partidas simultâneas. Ban/pick competitivo.</div><div class="slot-tag" style="background:var(--wr-g);color:var(--wr)">Semifinal</div></div></div>
+          <div class="slot"><div class="slot-time"><span class="t">20:00</span><span class="dur">15 min</span></div><div class="slot-info"><div class="slot-title">Disputa de 3º lugar (MD3)</div><div class="slot-desc">Partida rápida pelo bronze.</div></div></div>
+          <div class="slot"><div class="slot-time"><span class="t">20:15</span><span class="dur">75 min</span></div><div class="slot-info"><div class="slot-title">🏆 GRANDE FINAL (MD5)</div><div class="slot-desc">Melhor de 5. A batalha final do Scouts Games Cup.</div><div class="slot-tag" style="background:var(--wr);color:#fff">Final MD5</div></div></div>
+          <div class="slot"><div class="slot-time"><span class="t">21:30</span><span class="dur">—</span></div><div class="slot-info"><div class="slot-title">🎉 Premiação Wild Rift + Encerramento Geral</div><div class="slot-desc">Gift cards enviados. Ranking final do campeonato. Encerramento oficial do Scouts Games Cup!</div></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /timeline -->
+
+  <!-- CTA -->
+  <div class="cta-wrap">
+    <a class="cta" href="https://scouts-games-cup.vercel.app" target="_blank">📋 INSCREVA-SE AGORA</a>
+  </div>
+
+  <div class="footer">Scouts Games Cup · Organizado por Gabriel dos Reis Silva<br>Dúvidas? <a href="https://wa.me/5593984166832" target="_blank">WhatsApp (93) 98416-6832</a></div>
+</div>
+</body>
+</html>

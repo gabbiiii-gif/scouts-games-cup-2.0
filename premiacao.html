@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scouts Games Cup — Premiação</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#08080e;--surface:rgba(255,255,255,0.03);--border:rgba(255,255,255,0.07);
+    --text:#d0d0da;--text2:#888;--text3:#555;
+    --ff:#FF6B00;--ff-g:rgba(255,107,0,0.10);
+    --bs:#FFCE00;--bs-g:rgba(255,206,0,0.10);
+    --mc:#55C156;--mc-g:rgba(85,193,86,0.10);
+    --wr:#1DA1F2;--wr-g:rgba(29,161,242,0.10);
+    --gold:#FFD700;--silver:#C0C0C0;--bronze:#CD7F32;
+    --font:'Outfit',sans-serif;
+  }
+  body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:600px;margin:0 auto;padding:0 16px 48px}
+
+  .header{text-align:center;padding:44px 20px 32px;position:relative;overflow:hidden}
+  .header::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(ellipse,rgba(255,215,0,0.06) 0%,transparent 70%);pointer-events:none}
+  .header-tag{font-size:10px;font-weight:700;letter-spacing:4px;color:var(--text3);text-transform:uppercase;margin-bottom:10px}
+  .header h1{font-size:30px;font-weight:900;letter-spacing:-0.5px;background:linear-gradient(90deg,var(--gold),var(--ff),var(--bs));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .header p{font-size:13px;color:var(--text3);margin-top:8px}
+  .header .trophy{font-size:52px;margin-bottom:10px;display:block}
+
+  /* Hero prizes */
+  .podium{display:flex;align-items:flex-end;justify-content:center;gap:10px;margin-bottom:32px;padding:0 10px}
+  .podium-item{text-align:center;border-radius:14px;overflow:hidden;transition:transform 0.3s}
+  .podium-item:hover{transform:translateY(-4px)}
+  .podium-top{padding:20px 16px 16px}
+  .podium-medal{font-size:36px;margin-bottom:6px}
+  .podium-place{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+  .podium-pct{font-size:28px;font-weight:900}
+  .podium-label{font-size:10px;margin-top:2px;color:var(--text3)}
+  .podium-bar{height:6px;border-radius:0 0 14px 14px}
+
+  .p-gold{flex:1.2;background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.15)}
+  .p-gold .podium-place{color:var(--gold)}
+  .p-gold .podium-pct{color:var(--gold)}
+  .p-gold .podium-bar{background:linear-gradient(90deg,var(--gold),var(--ff))}
+
+  .p-silver{flex:1;background:rgba(192,192,192,0.05);border:1px solid rgba(192,192,192,0.12)}
+  .p-silver .podium-place{color:var(--silver)}
+  .p-silver .podium-pct{color:var(--silver)}
+  .p-silver .podium-bar{background:linear-gradient(90deg,var(--silver),#888)}
+
+  .p-bronze{flex:1;background:rgba(205,127,50,0.05);border:1px solid rgba(205,127,50,0.12)}
+  .p-bronze .podium-place{color:var(--bronze)}
+  .p-bronze .podium-pct{color:var(--bronze)}
+  .p-bronze .podium-bar{background:linear-gradient(90deg,var(--bronze),#a0652a)}
+
+  /* How it works */
+  .how-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 20px;margin-bottom:24px}
+  .how-title{font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+  .how-step{display:flex;gap:14px;align-items:flex-start;margin-bottom:14px}
+  .how-step:last-child{margin-bottom:0}
+  .how-num{min-width:30px;height:30px;border-radius:8px;background:var(--ff-g);color:var(--ff);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800}
+  .how-content .ht{font-size:13px;font-weight:700;color:#ddd;margin-bottom:2px}
+  .how-content .hd{font-size:12px;color:var(--text2);line-height:1.55}
+
+  /* Prize per game */
+  .game-prize{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:14px}
+  .gp-head{padding:18px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+  .gp-name{font-size:18px;font-weight:800;display:flex;align-items:center;gap:8px}
+  .gp-price{font-size:12px;color:var(--text2);font-weight:600}
+  .gp-body{padding:16px 20px}
+  .gp-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+  .gp-row:last-child{border:none}
+  .gp-left{display:flex;align-items:center;gap:10px}
+  .gp-medal{font-size:22px}
+  .gp-place-name{font-size:13px;font-weight:700;color:#ccc}
+  .gp-place-sub{font-size:10px;color:var(--text3)}
+  .gp-value{font-size:16px;font-weight:800}
+  .gp-note{font-size:11px;color:var(--text3);padding:12px 0 0;border-top:1px solid var(--border);margin-top:4px;line-height:1.5;font-style:italic}
+
+  /* Types of prizes */
+  .prizes-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px}
+  .prize-type{padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;text-align:center}
+  .prize-type .icon{font-size:28px;margin-bottom:6px}
+  .prize-type .name{font-size:12px;font-weight:700;color:#ddd}
+  .prize-type .desc{font-size:10px;color:var(--text3);margin-top:3px;line-height:1.4}
+
+  /* FAQ */
+  .faq{margin-bottom:24px}
+  .faq-title{font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .faq-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;overflow:hidden}
+  .faq-q{padding:14px 16px;font-size:13px;font-weight:700;color:#ddd;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+  .faq-q .arrow{color:var(--text3);transition:transform 0.2s;font-size:12px}
+  .faq-a{display:none;padding:0 16px 14px;font-size:12px;color:var(--text2);line-height:1.6}
+  .faq-item.open .faq-a{display:block}
+  .faq-item.open .arrow{transform:rotate(180deg)}
+
+  .cta-wrap{text-align:center;margin:28px 0}
+  .cta{display:inline-block;padding:14px 36px;border-radius:12px;background:linear-gradient(135deg,var(--ff),#e05500);color:#fff;font-size:15px;font-weight:800;font-family:var(--font);text-decoration:none;transition:filter 0.2s}
+  .cta:hover{filter:brightness(1.12)}
+
+  .footer{text-align:center;padding:20px;font-size:11px;color:var(--text3)}
+  .footer a{color:var(--ff);text-decoration:none}
+
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="trophy">🏆</span>
+  <div class="header-tag">Premiação Oficial</div>
+  <h1>SCOUTS GAMES CUP</h1>
+  <p>Gift Cards & Produtos — Distribuição transparente</p>
+</div>
+
+<div class="wrap">
+
+  <!-- Podium -->
+  <div class="podium">
+    <div class="podium-item p-silver">
+      <div class="podium-top">
+        <div class="podium-medal">🥈</div>
+        <div class="podium-place">2º Lugar</div>
+        <div class="podium-pct">30%</div>
+        <div class="podium-label">do fundo</div>
+      </div>
+      <div class="podium-bar"></div>
+    </div>
+    <div class="podium-item p-gold">
+      <div class="podium-top">
+        <div class="podium-medal">🥇</div>
+        <div class="podium-place">Campeão</div>
+        <div class="podium-pct">50%</div>
+        <div class="podium-label">do fundo</div>
+      </div>
+      <div class="podium-bar"></div>
+    </div>
+    <div class="podium-item p-bronze">
+      <div class="podium-top">
+        <div class="podium-medal">🥉</div>
+        <div class="podium-place">3º Lugar</div>
+        <div class="podium-pct">20%</div>
+        <div class="podium-label">do fundo</div>
+      </div>
+      <div class="podium-bar"></div>
+    </div>
+  </div>
+
+  <!-- Tipos de prêmio -->
+  <div class="prizes-grid">
+    <div class="prize-type">
+      <div class="icon">🎮</div>
+      <div class="name">Gift Cards</div>
+      <div class="desc">Google Play, PlayStation, Xbox, Steam, Roblox</div>
+    </div>
+    <div class="prize-type">
+      <div class="icon">💎</div>
+      <div class="name">Diamantes / Gemas</div>
+      <div class="desc">Recarga in-game para Free Fire, Brawl Stars, Wild Rift</div>
+    </div>
+    <div class="prize-type">
+      <div class="icon">🎧</div>
+      <div class="name">Produtos Gamer</div>
+      <div class="desc">Fones, periféricos e acessórios (quando disponível)</div>
+    </div>
+    <div class="prize-type">
+      <div class="icon">🏅</div>
+      <div class="name">Certificado</div>
+      <div class="desc">Certificado digital de participação para todos os inscritos</div>
+    </div>
+  </div>
+
+  <!-- Como funciona -->
+  <div class="how-box">
+    <div class="how-title">💡 Como funciona a premiação</div>
+    <div class="how-step">
+      <div class="how-num">1</div>
+      <div class="how-content"><div class="ht">Fundo de prêmios</div><div class="hd">70% de todas as inscrições vão direto para o fundo de prêmios. Os outros 30% cobrem custos da organização (servidor, divulgação, plataformas).</div></div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">2</div>
+      <div class="how-content"><div class="ht">Premiação por modalidade</div><div class="hd">Cada jogo tem seu próprio fundo, proporcional ao número de inscritos naquela modalidade. Mais inscritos = prêmio maior.</div></div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">3</div>
+      <div class="how-content"><div class="ht">Distribuição</div><div class="hd">1º lugar leva 50%, 2º lugar 30%, 3º lugar 20% do fundo da modalidade.</div></div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">4</div>
+      <div class="how-content"><div class="ht">Entrega</div><div class="hd">Gift cards e recargas enviados via WhatsApp no mesmo dia da final. Produtos físicos enviados em até 7 dias úteis.</div></div>
+    </div>
+  </div>
+
+  <!-- Simulação por jogo -->
+  <div class="how-title" style="margin-bottom:14px;padding:0">📊 Estimativa por Modalidade</div>
+  <p style="font-size:11px;color:var(--text3);margin-bottom:16px;line-height:1.5">Valores calculados com base em uma estimativa de inscritos. O prêmio final depende do total real de inscrições.</p>
+
+  <!-- Free Fire -->
+  <div class="game-prize">
+    <div class="gp-head">
+      <div class="gp-name" style="color:var(--ff)">🔥 Free Fire</div>
+      <div class="gp-price">R$ 20/squad · ~12 squads</div>
+    </div>
+    <div class="gp-body">
+      <div style="text-align:center;margin-bottom:12px">
+        <span style="font-size:11px;color:var(--text3)">Fundo estimado:</span>
+        <span style="font-size:18px;font-weight:800;color:var(--ff);margin-left:6px">R$ 168</span>
+      </div>
+      <div class="gp-row">
+        <div class="gp-left"><span class="gp-medal">🥇</span><div><div class="gp-place-name">Campeão</div><div class="gp-place-sub">50% do fundo</div></div></div>
+        <div class="gp-value" style="color:var(--gold)">R$ 84</div>
+      </div>
+      <div class="gp-row">
+        <div class="gp-left"><span class="gp-medal">🥈</span><div><div class="gp-place-name">Vice-campeão</div><div class="gp-place-sub">30% do fundo</div></div></div>
+        <div class="gp-value" style="color:var(--silver)">R$ 50</div>
+      </div>
+      <div class="gp-row">
+        <div class="gp-left"><span class="gp-medal">🥉</span><div><div class="gp-place-name">3º Lugar</div><div class="gp-place-sub">20% do fundo</div></div></div>
+        <div class="gp-value" style="color:var(--bronze)">R$ 33</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Brawl Stars -->
+  <div class="game-prize">
+    <div class="gp-head">
+      <div class="gp-name" style="color:var(--bs)">⭐ Brawl Stars</div>
+      <div class="gp-price">R$ 15/trio · ~10 trios</div>
+    </div>
+    <div class="gp-body">
+      <div style="text-align:center;margin-bottom:12px">
+        <span style="font-size:11px;color:var(--text3)">Fundo estimado:</span>
+        <span style="font-size:18px;font-weight:800;color:var(--bs);margin-left:6px">R$ 105</span>
+      </div>
+      <div class="gp-row">
+        <div class="gp-left"><span class="gp-medal">🥇</span><div><div class="gp-place-name">Campeão</div><div class="gp-place-sub">50% do fundo</div></div></div>
+        <div class="gp-value" style="color:var(--gold)">R$ 52</div>
+      </div>
+      <div class="gp-row">
+        <div class="gp-left"><span class="gp-medal">🥈</span><div><div class="gp-place-name">Vice-campeão</div><div class="gp-place-sub">30% do fundo</div></div></div>
+        <div class="gp-value" style="color:var(--silver)">R$ 31</div>
+      </div>
+      <div class="gp-row">
+        <div class="gp-left"><span class="gp-medal">🥉</span><div><div class="gp-place-name">3º Lugar</div><div class="gp-place-sub">20% do fundo</div></div></div>
+        <div class="gp-value" style="color:var(--bronze)">R$ 21</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Minecraft -->
+  <div class="game-prize">
+    <div class="gp-head">
+      <div class="gp-name" style="color:var(--mc)">⛏️ Minecraft</div>
+      <div class="gp-price">R$ 10/jogador · ~16 jogadores</div>
+    </div>
+    <div class="gp-body">
+      <div style="text-align:center;margin-bottom:12px">
+        <span style="font-size:11px;color:var(--text3)">Fundo estimado:</span>
+        <span style="font-size:18px;font-weight:800;color:var(--mc);margin-left:6px">R$ 112</span>
+      </div>
+      <div class="gp-row">
+        <div class="gp-left"><span class="gp-medal">🥇</span><div><div class="gp-place-name">Campeão</div><div class="gp-place-sub">50% do fundo</div></div></div>
+        <div class="gp-value" style="color:var(--gold)">R$ 56</div>
+      </div>
+      <div class="gp-row">
+        <div class="gp-left"><span class="gp-medal">🥈</span><div><div class="gp-place-name">Vice-campeão</div><div class="gp-place-sub">30% do fundo</div></div></div>
+        <div class="gp-value" style="color:var(--silver)">R$ 33</div>
+      </div>
+      <div class="gp-row">
+        <div class="gp-left"><span class="gp-medal">🥉</span><div><div class="gp-place-name">3º Lugar</div><div class="gp-place-sub">20% do fundo</div></div></div>
+        <div class="gp-value" style="color:var(--bronze)">R$ 22</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wild Rift -->
+  <div class="game-prize">
+    <div class="gp-head">
+      <div class="gp-name" style="color:var(--wr)">⚔️ Wild Rift</div>
+      <div class="gp-price">R$ 25/squad · ~10 squads</div>
+    </div>
+    <div class="gp-body">
+      <div style="text-align:center;margin-bottom:12px">
+        <span style="font-size:11px;color:var(--text3)">Fundo estimado:</span>
+        <span style="font-size:18px;font-weight:800;color:var(--wr);margin-left:6px">R$ 175</span>
+      </div>
+      <div class="gp-row">
+        <div class="gp-left"><span class="gp-medal">🥇</span><div><div class="gp-place-name">Campeão</div><div class="gp-place-sub">50% do fundo</div></div></div>
+        <div class="gp-value" style="color:var(--gold)">R$ 87</div>
+      </div>
+      <div class="gp-row">
+        <div class="gp-left"><span class="gp-medal">🥈</span><div><div class="gp-place-name">Vice-campeão</div><div class="gp-place-sub">30% do fundo</div></div></div>
+        <div class="gp-value" style="color:var(--silver)">R$ 52</div>
+      </div>
+      <div class="gp-row">
+        <div class="gp-left"><span class="gp-medal">🥉</span><div><div class="gp-place-name">3º Lugar</div><div class="gp-place-sub">20% do fundo</div></div></div>
+        <div class="gp-value" style="color:var(--bronze)">R$ 35</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Total geral -->
+  <div style="background:linear-gradient(135deg,rgba(255,215,0,0.06),rgba(255,107,0,0.06));border:1px solid rgba(255,215,0,0.12);border-radius:14px;padding:22px;text-align:center;margin-bottom:24px">
+    <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px">Fundo total estimado (todas modalidades)</div>
+    <div style="font-size:32px;font-weight:900;color:var(--gold)">R$ 560</div>
+    <div style="font-size:11px;color:var(--text3);margin-top:4px">baseado em ~48 inscrições · valor real depende do total de inscritos</div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq">
+    <div class="faq-title">❓ Perguntas Frequentes</div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">Como recebo meu prêmio?<span class="arrow">▼</span></div>
+      <div class="faq-a">Gift cards e recargas são enviados via WhatsApp no mesmo dia da final da sua modalidade. Você recebe o código/print direto na conversa com a organização.</div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">Posso escolher qual gift card quero?<span class="arrow">▼</span></div>
+      <div class="faq-a">Sim! O vencedor escolhe entre as opções disponíveis: Google Play, PlayStation Store, Xbox, Steam, Roblox ou recarga de diamantes/gemas no jogo.</div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">O valor pode mudar?<span class="arrow">▼</span></div>
+      <div class="faq-a">Sim. Os valores mostrados são estimativas baseadas em uma previsão de inscritos. Quanto mais jogadores, maior o fundo e maior o prêmio. O valor final é calculado após o encerramento das inscrições.</div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">E se eu jogar mais de uma modalidade?<span class="arrow">▼</span></div>
+      <div class="faq-a">Pode! Cada modalidade tem seu próprio fundo de prêmios. Se você se inscrever em Free Fire e Minecraft, concorre aos prêmios das duas separadamente.</div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">Todo mundo recebe algo?<span class="arrow">▼</span></div>
+      <div class="faq-a">Todos os inscritos recebem um certificado digital de participação. Os prêmios em gift cards/produtos são para os 3 primeiros colocados de cada modalidade.</div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">Para onde vai o dinheiro da organização (30%)?<span class="arrow">▼</span></div>
+      <div class="faq-a">Cobre custos reais: servidor de Minecraft, taxas de plataforma, artes de divulgação, tempo de organização e suporte durante os jogos. Tudo transparente.</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-wrap">
+    <a class="cta" href="https://scouts-games-cup.vercel.app" target="_blank">📋 INSCREVA-SE E CONCORRA</a>
+  </div>
+
+  <div class="footer">Scouts Games Cup · Organizado por Gabriel dos Reis Silva<br>Dúvidas? <a href="https://wa.me/5593984166832" target="_blank">WhatsApp (93) 98416-6832</a></div>
+</div>
+</body>
+</html>
